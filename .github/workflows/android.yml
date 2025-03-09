@@ -1,0 +1,62 @@
+name: Build Android APK
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  
+  build:
+    name: Android
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout workspace
+        uses: actions/checkout@v3
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'adopt'
+          java-version: '17'
+      - name: Display Java version
+        run: java -version
+      - name: Build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew assembleRelease bundleRelease --info
+      - name: List files
+        run: ls -lah app/build/outputs/apk/release
+      - name: Sign APK
+        uses: ./.github/actions/sign-android-release
+        with:
+          releaseDirectory: app/build/outputs/apk/release
+          signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
+          alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: 35.0.0
+      - name: Sign Bundle
+        uses: ./.github/actions/sign-android-release
+        with:
+          releaseDirectory: app/build/outputs/bundle/release
+          signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
+          alias: ${{ secrets.ANDROID_KEY_ALIAS }}
+          keyStorePassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          keyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        env:
+          BUILD_TOOLS_VERSION: 35.0.0
+      - name: Move artifact
+        run: |
+          mv app/build/outputs/apk/release/app-release-unsigned-signed.apk mines.apk
+          mv app/build/outputs/bundle/release/app-release.aab mines.aab
+      - name: List files
+        run: find .
+      - name: Upload mines.apk & mines.aab
+        uses: actions/upload-artifact@v4
+        with:
+          if-no-files-found: error
+          name: android
+          path: |
+            mines.apk
+            mines.aab

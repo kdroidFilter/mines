@@ -8,7 +8,12 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    alias(libs.plugins.androidGitVersion)
 }
+
+version = androidGitVersion.name()
+
+logger.lifecycle("App version $version (Code: ${androidGitVersion.code()})")
 
 kotlin {
 
@@ -85,11 +90,23 @@ android {
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
+
         applicationId = "de.stefan_oltmann.mines"
+
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
+
+        if (androidGitVersion.code() == 0) {
+
+            /* Values for the dev version. */
+            versionName = "1.0.0"
+            versionCode = 1
+
+        } else {
+
+            versionName = androidGitVersion.name()
+            versionCode = androidGitVersion.code()
+        }
     }
 
     packaging {
@@ -100,6 +117,9 @@ android {
 
     buildTypes {
         getByName("release") {
+            /*
+             * As an open source project we don't need ProGuard.
+             */
             isMinifyEnabled = false
         }
     }
@@ -127,7 +147,15 @@ compose.desktop {
 
             packageName = "Mines"
 
-            packageVersion = "1.0.0"
+            if (androidGitVersion.code() == 0) {
+
+                /* Values for the dev version. */
+                packageVersion = "1.0.0"
+
+            } else {
+
+                packageVersion = version.toString()
+            }
 
             macOS {
                 iconFile.set(project.file("icon/icon.icns"))
