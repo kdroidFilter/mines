@@ -11,6 +11,10 @@ plugins {
     alias(libs.plugins.androidGitVersion)
 }
 
+androidGitVersion {
+    format = "%tag%"
+}
+
 version = androidGitVersion.name()
 
 logger.lifecycle("App version $version (Code: ${androidGitVersion.code()})")
