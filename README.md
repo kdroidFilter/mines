@@ -2,9 +2,13 @@
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.1.10-blue.svg?logo=kotlin)](httpw://kotlinlang.org)
 
-[![Get in on Google Play](images/play_store_badge.png)](https://play.google.com/store/apps/details?id=de.stefan_oltmann.mines)
-
-[![Available at amazon](images/amazon_app_store_badge.png)](https://www.amazon.de/dp/B0DZVS6LTN)
+<a href="https://play.google.com/store/apps/details?id=de.stefan_oltmann.mines">
+    <img src="images/play_store_badge.png" alt="Get in on Google Play" width="200">
+</a>
+<br>
+<a href="https://www.amazon.de/dp/B0DZVS6LTN">
+    <img src="images/amazon_app_store_badge.png" alt="Available at amazon" width="200">
+</a>
 
 A simple mine puzzle game inspired by classic minesweeper, built using Kotlin Multiplatform.
 
