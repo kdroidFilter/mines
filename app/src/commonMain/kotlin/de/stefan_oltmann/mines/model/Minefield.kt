@@ -72,7 +72,7 @@ class Minefield(
     /**
      * Check if all non-mine fields are revealed now.
      */
-    fun isAllFieldsRevealed(): Boolean {
+    fun isAllRevealed(): Boolean {
 
         for (x in 0 until width)
             for (y in 0 until height)

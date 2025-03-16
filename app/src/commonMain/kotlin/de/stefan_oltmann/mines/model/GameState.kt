@@ -109,7 +109,7 @@ class GameState {
         /* Reveal the field in any case */
         minefield.reveal(x, y)
 
-        /* Check game over condition */
+        /* On hitting a mine the game is over. */
         if (minefield.isMine(x, y)) {
 
             isTimerRunning = false
@@ -122,8 +122,15 @@ class GameState {
             return
         }
 
+        /*
+         * If hitting a number field all adjacent cells
+         * get revealed, if the same number of flags have
+         * been set. If one cell is a mine, the game is over.
+         */
+        // TODO Implement
+
         /* Check win condition */
-        if (minefield.isAllFieldsRevealed()) {
+        if (minefield.isAllRevealed()) {
 
             isTimerRunning = false
 
