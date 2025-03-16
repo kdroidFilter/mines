@@ -97,22 +97,15 @@ class Minefield(
         /* If the cell is empty, recursively reveal adjacent cells */
         if (matrix[x][y] == CellType.EMPTY) {
 
-            for ((dx, dy) in directionsOfAdjacentCells) {
+            performOnAdjacentCells(x, y) { adjX, adjY ->
 
-                val adjX = x + dx
-                val adjY = y + dy
+                if (isRevealed(adjX, adjY))
+                    return@performOnAdjacentCells
 
-                if (adjX in matrix.indices &&
-                    adjY in matrix[0].indices &&
-                    !revealedMatrix[adjX][adjY]
-                )
-                    reveal(adjX, adjY)
+                reveal(adjX, adjY)
             }
         }
     }
-
-    fun isWithinBounds(x: Int, y: Int): Boolean =
-        x in 0 until width && y in 0 until height
 
     /**
      * Reveal adjacent cells around a number field.
@@ -137,26 +130,19 @@ class Minefield(
 
             if (cellType.adjacentMineCount == adjacentFlags) {
 
-                for ((dx, dy) in directionsOfAdjacentCells) {
+                performOnAdjacentCells(x, y) { adjX, adjY ->
 
-                    val adjX = x + dx
-                    val adjY = y + dy
+                    if (isRevealed(adjX, adjY) || isFlagged(adjX, adjY))
+                        return@performOnAdjacentCells
 
-                    if (
-                        isWithinBounds(adjX, adjY) &&
-                        !isRevealed(adjX, adjY) &&
-                        !isFlagged(adjX, adjY)
-                    ) {
+                    reveal(adjX, adjY)
 
-                        reveal(adjX, adjY)
-
-                        /*
-                         * Don't return on hit mine yet,
-                         * but reveal all other fields, too.
-                         */
-                        if (isMine(adjX, adjY))
-                            hitMine = true
-                    }
+                    /*
+                     * We want to reveal all adjacent cells,
+                     * so we don't immediately return here.
+                     */
+                    if (isMine(adjX, adjY))
+                        hitMine = true
                 }
             }
         }
@@ -176,14 +162,33 @@ class Minefield(
     fun isMine(x: Int, y: Int): Boolean =
         matrix[x][y] == CellType.MINE
 
-    fun countAdjacentFlags(x: Int, y: Int): Int =
+    private fun countAdjacentFlags(x: Int, y: Int): Int =
         directionsOfAdjacentCells.count { (dx, dy) ->
 
             val adjX = x + dx
             val adjY = y + dy
 
-            isWithinBounds(adjX, adjY) && isFlagged(adjX, adjY)
+            isCellWithinBounds(adjX, adjY) && isFlagged(adjX, adjY)
         }
+
+    private fun isCellWithinBounds(x: Int, y: Int): Boolean =
+        x in 0 until width && y in 0 until height
+
+    private fun performOnAdjacentCells(
+        x: Int,
+        y: Int,
+        action: (Int, Int) -> Unit
+    ) {
+
+        for ((dx, dy) in directionsOfAdjacentCells) {
+
+            val adjX = x + dx
+            val adjY = y + dy
+
+            if (isCellWithinBounds(adjX, adjY))
+                action(adjX, adjY)
+        }
+    }
 
     companion object {
 

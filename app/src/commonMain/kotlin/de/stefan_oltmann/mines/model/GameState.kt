@@ -145,6 +145,7 @@ class GameState {
         /* Check win condition */
         if (minefield.isAllRevealed()) {
 
+
             isTimerRunning = false
 
             gameWon = true
