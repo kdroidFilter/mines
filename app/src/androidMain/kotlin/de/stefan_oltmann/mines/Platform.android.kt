@@ -26,7 +26,7 @@ actual val defaultMapWidth: Int = 7
 actual val defaultMapHeight: Int = 7
 
 /* Not effective as there is no right-click on Android */
-actual fun Modifier.addRightClickListener(onClick: (Offset) -> Unit): Modifier = this
+actual fun Modifier.addRightClickListener(key: Any?, onClick: (Offset) -> Unit): Modifier = this
 
 @Composable
 actual fun BoxScope.HorizontalScrollbar(scrollState: ScrollState) = Unit

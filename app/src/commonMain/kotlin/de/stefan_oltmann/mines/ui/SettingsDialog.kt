@@ -47,7 +47,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.stefan_oltmann.mines.ENABLED_CELL_SIZE_SETTING
 import de.stefan_oltmann.mines.FONT_SIZE
 import de.stefan_oltmann.mines.model.GameConfig
 import de.stefan_oltmann.mines.model.GameDifficulty
@@ -108,39 +107,36 @@ fun SettingsDialog(
                 modifier = Modifier.doublePadding()
             ) {
 
-                if (ENABLED_CELL_SIZE_SETTING) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(defaultSpacing),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(horizontal = defaultSpacing)
+                ) {
 
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(defaultSpacing),
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.padding(horizontal = defaultSpacing)
-                    ) {
+                    Icon(
+                        imageVector = IconZoom,
+                        contentDescription = null,
+                        tint = lightGray
+                    )
 
-                        Icon(
-                            imageVector = IconZoom,
-                            contentDescription = null,
-                            tint = lightGray
-                        )
+                    Slider(
+                        value = cellSize.value,
+                        onValueChange = {
+                            cellSize.value = it
+                        },
+                        valueRange = 30f..80f,
+                        colors = sliderColors,
+                        modifier = Modifier.weight(1F)
+                    )
 
-                        Slider(
-                            value = cellSize.value,
-                            onValueChange = {
-                                cellSize.value = it
-                            },
-                            valueRange = 30f..50f,
-                            colors = sliderColors,
-                            modifier = Modifier.weight(1F)
-                        )
-
-                        Text(
-                            text = cellSize.value.toInt().toString(),
-                            fontFamily = fontFamily,
-                            color = lightGray,
-                            fontSize = FONT_SIZE.sp,
-                            textAlign = TextAlign.Right,
-                            modifier = Modifier.widthIn(min = 20.dp)
-                        )
-                    }
+                    Text(
+                        text = cellSize.value.toInt().toString(),
+                        fontFamily = fontFamily,
+                        color = lightGray,
+                        fontSize = FONT_SIZE.sp,
+                        textAlign = TextAlign.Right,
+                        modifier = Modifier.widthIn(min = 20.dp)
+                    )
                 }
 
                 Row(

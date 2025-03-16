@@ -116,7 +116,7 @@ fun MinefieldCanvas(
                 width = (minefield.width * cellSize).dp,
                 height = (minefield.height * cellSize).dp
             )
-            .pointerInput(Unit) {
+            .pointerInput(cellSizeWithDensity) {
 
                 awaitPointerEventScope {
                     while (true) {
@@ -143,7 +143,7 @@ fun MinefieldCanvas(
                     }
                 }
             }
-            .addRightClickListener { offset ->
+            .addRightClickListener(cellSizeWithDensity) { offset ->
 
                 flag(
                     (offset.x / cellSizeWithDensity.width).toInt(),

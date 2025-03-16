@@ -38,8 +38,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
@@ -80,15 +78,35 @@ fun App() {
 
     val redrawState = remember { mutableStateOf(0) }
 
-    /* Launch a new game every time the settings change */
+    /*
+     * Initially start a new game when opened.
+     */
+    LaunchedEffect(Unit) {
+        gameState.restart(gameConfig.value)
+    }
+
     LaunchedEffect(gameConfig.value) {
 
-        settings["cellSize"] = gameConfig.value.cellSize
-        settings["mapWidth"] = gameConfig.value.mapWidth
-        settings["mapHeight"] = gameConfig.value.mapHeight
-        settings["difficulty"] = gameConfig.value.difficulty.name
+        val newGameConfig = gameConfig.value
 
-        gameState.restart(gameConfig.value)
+        val oldMapWidth = settings["mapWidth"] ?: defaultMapWidth
+        val oldMapHeight = settings["mapHeight"] ?: defaultMapHeight
+        val oldDifficulty = GameDifficulty.valueOf(settings["difficulty"] ?: GameDifficulty.EASY.name)
+
+        /* Save new settings to config */
+        settings["cellSize"] = newGameConfig.cellSize
+        settings["mapWidth"] = newGameConfig.mapWidth
+        settings["mapHeight"] = newGameConfig.mapHeight
+        settings["difficulty"] = newGameConfig.difficulty.name
+
+        val mapSettingsChanged =
+            oldMapWidth != newGameConfig.mapWidth ||
+                oldMapHeight != newGameConfig.mapHeight ||
+                oldDifficulty != newGameConfig.difficulty
+
+        /* Launch a new game every time the settings change something that influences the map */
+        if (mapSettingsChanged)
+            gameState.restart(gameConfig.value)
 
         // HACK
         redrawState.value += 1

@@ -45,8 +45,8 @@ actual val defaultMapWidth: Int = 10
 actual val defaultMapHeight: Int = 10
 
 @OptIn(ExperimentalComposeUiApi::class)
-actual fun Modifier.addRightClickListener(onClick: (Offset) -> Unit): Modifier =
-    this.pointerInput(Unit) {
+actual fun Modifier.addRightClickListener(key: Any?, onClick: (Offset) -> Unit): Modifier =
+    this.pointerInput(key) {
         awaitPointerEventScope {
             while (true) {
 

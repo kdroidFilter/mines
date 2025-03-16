@@ -30,4 +30,4 @@ const val LONG_PRESS_TIMEOUT_MS: Long = 200
 /*
  * Buggy right now.
  */
-const val ENABLED_CELL_SIZE_SETTING = false
+const val ENABLED_CELL_SIZE_SETTING = true

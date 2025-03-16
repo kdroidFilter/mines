@@ -33,6 +33,7 @@ expect val defaultMapWidth: Int
 expect val defaultMapHeight: Int
 
 expect fun Modifier.addRightClickListener(
+    key: Any?,
     onClick: (Offset) -> Unit
 ): Modifier
 
