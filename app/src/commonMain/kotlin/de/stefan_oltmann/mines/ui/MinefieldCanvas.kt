@@ -24,7 +24,6 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,6 +42,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.stefan_oltmann.mines.LONG_PRESS_TIMEOUT_MS
@@ -52,6 +52,7 @@ import de.stefan_oltmann.mines.model.Minefield
 import de.stefan_oltmann.mines.ui.theme.colorCardBackground
 import de.stefan_oltmann.mines.ui.theme.colorCellBorder
 import de.stefan_oltmann.mines.ui.theme.colorCellHidden
+import de.stefan_oltmann.mines.ui.theme.colorCellHiddenPressed
 import de.stefan_oltmann.mines.ui.theme.colorEightAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorFiveAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorFourAdjacentMines
@@ -96,14 +97,7 @@ fun MinefieldCanvas(
         height = cellSizeWithDensity.height - cellPaddingWithDensity * 2
     )
 
-    val pressed = remember { mutableStateOf(false) }
-
-    LaunchedEffect(pressed.value) {
-
-        println("Pressed: ${pressed.value}")
-
-        redrawState.value += 1
-    }
+    val pressedPosition = remember { mutableStateOf<IntOffset?>(null) }
 
     Canvas(
         modifier = Modifier
@@ -116,15 +110,15 @@ fun MinefieldCanvas(
                 awaitPointerEventScope {
                     while (true) {
 
-                        val down = awaitFirstDown()
+                        val pointerInputChange = awaitFirstDown()
 
-                        val x = (down.position.x / cellSizeWithDensity.width).toInt()
-                        val y = (down.position.y / cellSizeWithDensity.height).toInt()
+                        val x = (pointerInputChange.position.x / cellSizeWithDensity.width).toInt()
+                        val y = (pointerInputChange.position.y / cellSizeWithDensity.height).toInt()
 
-                        pressed.value = true
+                        pressedPosition.value = IntOffset(x, y)
 
                         val longPress = withTimeoutOrNull(LONG_PRESS_TIMEOUT_MS) {
-                            awaitLongPressOrCancellation(down.id)
+                            awaitLongPressOrCancellation(pointerInputChange.id)
                         }
 
                         if (longPress != null)
@@ -132,7 +126,7 @@ fun MinefieldCanvas(
                         else
                             hit(x, y)
 
-                        pressed.value = false
+                        pressedPosition.value = null
 
                         redrawState.value += 1
                     }
@@ -178,8 +172,15 @@ fun MinefieldCanvas(
 
                 } else {
 
+                    val pressedPositionValue = pressedPosition.value
+
+                    val pressed =
+                        pressedPositionValue != null &&
+                            pressedPositionValue.x == x &&
+                            pressedPositionValue.y == y
+
                     drawRoundRect(
-                        color = colorCellHidden,
+                        color = if (pressed) colorCellHiddenPressed else colorCellHidden,
                         topLeft = offset,
                         size = innerCellSizeWithDensity,
                         cornerRadius = cellCornerRadius,
