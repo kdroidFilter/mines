@@ -19,18 +19,20 @@
 
 package de.stefan_oltmann.mines.model
 
-enum class CellType {
+enum class CellType(
+    val adjacentMineCount: Int
+) {
 
-    EMPTY,
-    MINE,
-    ONE,
-    TWO,
-    THREE,
-    FOUR,
-    FIVE,
-    SIX,
-    SEVEN,
-    EIGHT;
+    EMPTY(0),
+    MINE(-1),
+    ONE(1),
+    TWO(2),
+    THREE(3),
+    FOUR(4),
+    FIVE(5),
+    SIX(6),
+    SEVEN(7),
+    EIGHT(8);
 
     companion object {
 

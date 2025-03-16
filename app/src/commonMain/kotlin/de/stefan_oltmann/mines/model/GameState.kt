@@ -102,32 +102,45 @@ class GameState {
         if (!isTimerRunning)
             startTimer()
 
-        /* Ignore clicks on already revealed or flagged cells. */
-        if (minefield.isRevealed(x, y) || minefield.isFlagged(x, y))
+        /* Ignore clicks on flagged cells as these are most likely accidents. */
+        if (minefield.isFlagged(x, y))
             return
 
-        /* Reveal the field in any case */
-        minefield.reveal(x, y)
+        val revealed = minefield.isRevealed(x, y)
 
-        /* On hitting a mine the game is over. */
-        if (minefield.isMine(x, y)) {
+        if (!revealed) {
 
-            isTimerRunning = false
+            /* Reveal the field in any case */
+            minefield.reveal(x, y)
 
-            gameOver = true
+            /* On hitting a mine the game is over. */
+            if (minefield.isMine(x, y)) {
 
-            /* Show the user all mines. */
-            minefield.revealAllMines()
+                isTimerRunning = false
 
-            return
+                gameOver = true
+
+                return
+            }
         }
 
         /*
-         * If hitting a number field all adjacent cells
-         * get revealed, if the same number of flags have
-         * been set. If one cell is a mine, the game is over.
+         * Tapping on a revealed number should reveal all
+         * adjacent fields if a matching number of flags is set.
          */
-        // TODO Implement
+        if (revealed) {
+
+            val hitMineWhileRevealingAdjacentCells = minefield.revealAdjacentCells(x, y)
+
+            if (hitMineWhileRevealingAdjacentCells) {
+
+                isTimerRunning = false
+
+                gameOver = true
+
+                return
+            }
+        }
 
         /* Check win condition */
         if (minefield.isAllRevealed()) {
