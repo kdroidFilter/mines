@@ -157,6 +157,14 @@ class Minefield(
         flaggedMatrix[x][y] = !flaggedMatrix[x][y]
     }
 
+    fun flagAllMines() {
+
+        for (x in 0 until width)
+            for (y in 0 until height)
+                if (isMine(x, y))
+                    flaggedMatrix[x][y] = true
+    }
+
     fun getCellType(x: Int, y: Int): CellType = matrix[x][y]
 
     fun isMine(x: Int, y: Int): Boolean =

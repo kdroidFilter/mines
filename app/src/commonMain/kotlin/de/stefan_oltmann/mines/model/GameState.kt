@@ -145,6 +145,11 @@ class GameState {
         /* Check win condition */
         if (minefield.isAllRevealed()) {
 
+            /*
+             * Many games flag all remaining mines
+             * for the finish screen.
+             */
+            minefield.flagAllMines()
 
             isTimerRunning = false
 
