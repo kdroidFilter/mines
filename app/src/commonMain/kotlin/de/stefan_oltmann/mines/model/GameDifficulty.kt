@@ -20,7 +20,7 @@
 package de.stefan_oltmann.mines.model
 
 enum class GameDifficulty(
-    val minePercentage: Int
+    private val minePercentage: Int
 ) {
 
     EASY(10),
