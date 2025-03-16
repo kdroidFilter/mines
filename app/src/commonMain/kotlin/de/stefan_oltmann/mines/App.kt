@@ -107,12 +107,6 @@ fun App() {
      */
     redrawState.value
 
-    val textMeasurer = rememberTextMeasurer()
-
-    val density = LocalDensity.current.density
-
-    val cellSize = gameConfig.value.cellSize.toFloat()
-
     Column {
 
         Box(
@@ -182,10 +176,8 @@ fun App() {
 
                                 MinefieldCanvas(
                                     minefield,
-                                    cellSize,
-                                    density,
+                                    gameConfig,
                                     redrawState,
-                                    textMeasurer,
                                     fontFamily,
                                     hit = { x, y -> gameState.hit(x, y) },
                                     flag = { x, y -> gameState.flag(x, y) }

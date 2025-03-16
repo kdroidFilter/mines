@@ -37,17 +37,20 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.stefan_oltmann.mines.LONG_PRESS_TIMEOUT_MS
 import de.stefan_oltmann.mines.addRightClickListener
 import de.stefan_oltmann.mines.model.CellType
+import de.stefan_oltmann.mines.model.GameConfig
 import de.stefan_oltmann.mines.model.Minefield
 import de.stefan_oltmann.mines.ui.theme.colorCardBackground
 import de.stefan_oltmann.mines.ui.theme.colorCellBorder
@@ -76,26 +79,34 @@ private val cellStroke = Stroke(
 @Composable
 fun MinefieldCanvas(
     minefield: Minefield,
-    cellSize: Float,
-    density: Float,
+    gameConfig: MutableState<GameConfig>,
     redrawState: MutableState<Int>,
-    textMeasurer: TextMeasurer,
     fontFamily: FontFamily,
     hit: (Int, Int) -> Unit,
     flag: (Int, Int) -> Unit
 ) {
 
-    val cellSizeWithDensity = Size(
-        width = cellSize * density,
-        height = cellSize * density
-    )
+    val textMeasurer = rememberTextMeasurer()
+
+    val density = LocalDensity.current.density
+
+    val cellSize = gameConfig.value.cellSize
+
+    val cellSizeWithDensity = remember(cellSize, density) {
+        Size(
+            width = cellSize * density,
+            height = cellSize * density
+        )
+    }
 
     val cellPaddingWithDensity = 2 * density
 
-    val innerCellSizeWithDensity = cellSizeWithDensity.copy(
-        width = cellSizeWithDensity.width - cellPaddingWithDensity * 2,
-        height = cellSizeWithDensity.height - cellPaddingWithDensity * 2
-    )
+    val innerCellSizeWithDensity = remember(cellSizeWithDensity, density) {
+        cellSizeWithDensity.copy(
+            width = cellSizeWithDensity.width - cellPaddingWithDensity * 2,
+            height = cellSizeWithDensity.height - cellPaddingWithDensity * 2
+        )
+    }
 
     val pressedPosition = remember { mutableStateOf<IntOffset?>(null) }
 
