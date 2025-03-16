@@ -20,10 +20,14 @@
 package de.stefan_oltmann.mines.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
@@ -41,6 +45,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import de.stefan_oltmann.mines.LONG_PRESS_TIMEOUT_MS
 import de.stefan_oltmann.mines.addRightClickListener
 import de.stefan_oltmann.mines.model.CellType
 import de.stefan_oltmann.mines.model.Minefield
@@ -91,6 +96,15 @@ fun MinefieldCanvas(
         height = cellSizeWithDensity.height - cellPaddingWithDensity * 2
     )
 
+    val pressed = remember { mutableStateOf(false) }
+
+    LaunchedEffect(pressed.value) {
+
+        println("Pressed: ${pressed.value}")
+
+        redrawState.value += 1
+    }
+
     Canvas(
         modifier = Modifier
             .size(
@@ -98,26 +112,31 @@ fun MinefieldCanvas(
                 height = (minefield.height * cellSize).dp
             )
             .pointerInput(Unit) {
-                detectTapGestures(
-                    onTap = { offset ->
 
-                        hit(
-                            (offset.x / cellSizeWithDensity.width).toInt(),
-                            (offset.y / cellSizeWithDensity.height).toInt()
-                        )
+                awaitPointerEventScope {
+                    while (true) {
 
-                        redrawState.value += 1
-                    },
-                    onLongPress = { offset ->
+                        val down = awaitFirstDown()
 
-                        flag(
-                            (offset.x / cellSizeWithDensity.width).toInt(),
-                            (offset.y / cellSizeWithDensity.height).toInt()
-                        )
+                        val x = (down.position.x / cellSizeWithDensity.width).toInt()
+                        val y = (down.position.y / cellSizeWithDensity.height).toInt()
+
+                        pressed.value = true
+
+                        val longPress = withTimeoutOrNull(LONG_PRESS_TIMEOUT_MS) {
+                            awaitLongPressOrCancellation(down.id)
+                        }
+
+                        if (longPress != null)
+                            flag(x, y)
+                        else
+                            hit(x, y)
+
+                        pressed.value = false
 
                         redrawState.value += 1
                     }
-                )
+                }
             }
             .addRightClickListener { offset ->
 
