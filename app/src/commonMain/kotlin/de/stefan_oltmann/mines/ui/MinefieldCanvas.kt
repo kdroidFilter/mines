@@ -20,8 +20,6 @@
 package de.stefan_oltmann.mines.ui
 
 import androidx.compose.foundation.Canvas
-import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -117,31 +115,41 @@ fun MinefieldCanvas(
                 height = (minefield.height * cellSize).dp
             )
             .pointerInput(cellSizeWithDensity) {
+                detectTapGesturesMod(
+                    onTap = { position ->
 
-                awaitPointerEventScope {
-                    while (true) {
+                        val x = (position.x / cellSizeWithDensity.width).toInt()
+                        val y = (position.y / cellSizeWithDensity.height).toInt()
 
-                        val pointerInputChange = awaitFirstDown()
+                        hit(x, y)
 
-                        val x = (pointerInputChange.position.x / cellSizeWithDensity.width).toInt()
-                        val y = (pointerInputChange.position.y / cellSizeWithDensity.height).toInt()
+                        redrawState.value += 1
+                    },
+                    onLongPress = { position ->
 
-                        pressedPosition.value = IntOffset(x, y)
+                        val x = (position.x / cellSizeWithDensity.width).toInt()
+                        val y = (position.y / cellSizeWithDensity.height).toInt()
 
-                        val longPress = withTimeoutOrNull(LONG_PRESS_TIMEOUT_MS) {
-                            awaitLongPressOrCancellation(pointerInputChange.id)
-                        }
+                        flag(x, y)
 
-                        if (longPress != null)
-                            flag(x, y)
-                        else
-                            hit(x, y)
-
+                        /* If the flag is set, the press completed. */
                         pressedPosition.value = null
 
                         redrawState.value += 1
-                    }
-                }
+                    },
+                    onPress = { position ->
+
+                        pressedPosition.value = IntOffset(
+                            (position.x / cellSizeWithDensity.width).toInt(),
+                            (position.y / cellSizeWithDensity.height).toInt()
+                        )
+
+                        tryAwaitRelease()
+
+                        pressedPosition.value = null
+                    },
+                    longPressTimeoutMillis = LONG_PRESS_TIMEOUT_MS
+                )
             }
             .addRightClickListener(cellSizeWithDensity) { offset ->
 
