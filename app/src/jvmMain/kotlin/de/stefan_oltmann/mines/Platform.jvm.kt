@@ -34,7 +34,7 @@ import androidx.compose.ui.input.pointer.isSecondary
 import androidx.compose.ui.input.pointer.pointerInput
 import com.russhwolf.settings.PreferencesSettings
 import com.russhwolf.settings.Settings
-import de.stefan_oltmann.mines.ui.theme.lightGray
+import de.stefan_oltmann.mines.ui.theme.colorForeground
 import java.util.prefs.Preferences
 
 private val preferences: Preferences = Preferences.userRoot().node("stefan-oltmann-mines")
@@ -71,8 +71,8 @@ actual fun BoxScope.HorizontalScrollbar(scrollState: ScrollState) {
         adapter = rememberScrollbarAdapter(scrollState),
         modifier = Modifier.fillMaxWidth().align(Alignment.BottomCenter),
         style = defaultScrollbarStyle().copy(
-            unhoverColor = lightGray.copy(alpha = 0.4f),
-            hoverColor = lightGray
+            unhoverColor = colorForeground.copy(alpha = 0.4f),
+            hoverColor = colorForeground
         )
     )
 }
@@ -84,8 +84,8 @@ actual fun BoxScope.VerticalScrollbar(scrollState: ScrollState) {
         adapter = rememberScrollbarAdapter(scrollState),
         modifier = Modifier.fillMaxHeight().align(Alignment.CenterEnd),
         style = defaultScrollbarStyle().copy(
-            unhoverColor = lightGray.copy(alpha = 0.4f),
-            hoverColor = lightGray
+            unhoverColor = colorForeground.copy(alpha = 0.4f),
+            hoverColor = colorForeground
         )
     )
 }

@@ -64,7 +64,7 @@ import de.stefan_oltmann.mines.ui.theme.colorCellHidden
 import de.stefan_oltmann.mines.ui.theme.defaultRoundedCornerShape
 import de.stefan_oltmann.mines.ui.theme.defaultSpacing
 import de.stefan_oltmann.mines.ui.theme.doublePadding
-import de.stefan_oltmann.mines.ui.theme.lightGray
+import de.stefan_oltmann.mines.ui.theme.colorForeground
 import de.stefan_oltmann.mines.ui.theme.sliderColors
 
 @Composable
@@ -116,7 +116,7 @@ fun SettingsDialog(
                     Icon(
                         imageVector = IconZoom,
                         contentDescription = null,
-                        tint = lightGray
+                        tint = colorForeground
                     )
 
                     Slider(
@@ -132,7 +132,7 @@ fun SettingsDialog(
                     Text(
                         text = cellSize.value.toInt().toString(),
                         fontFamily = fontFamily,
-                        color = lightGray,
+                        color = colorForeground,
                         fontSize = FONT_SIZE.sp,
                         textAlign = TextAlign.Right,
                         modifier = Modifier.widthIn(min = 20.dp)
@@ -148,7 +148,7 @@ fun SettingsDialog(
                     Icon(
                         imageVector = IconWidth,
                         contentDescription = null,
-                        tint = lightGray
+                        tint = colorForeground
                     )
 
                     Slider(
@@ -164,7 +164,7 @@ fun SettingsDialog(
                     Text(
                         text = mapWidth.value.toInt().toString(),
                         fontFamily = fontFamily,
-                        color = lightGray,
+                        color = colorForeground,
                         fontSize = FONT_SIZE.sp,
                         textAlign = TextAlign.Right,
                         modifier = Modifier.widthIn(min = 20.dp)
@@ -180,7 +180,7 @@ fun SettingsDialog(
                     Icon(
                         imageVector = IconHeight,
                         contentDescription = null,
-                        tint = lightGray
+                        tint = colorForeground
                     )
 
                     Slider(
@@ -196,7 +196,7 @@ fun SettingsDialog(
                     Text(
                         text = mapHeight.value.toInt().toString(),
                         fontFamily = fontFamily,
-                        color = lightGray,
+                        color = colorForeground,
                         fontSize = FONT_SIZE.sp,
                         textAlign = TextAlign.Right,
                         modifier = Modifier.widthIn(min = 20.dp)
@@ -216,7 +216,7 @@ fun SettingsDialog(
                             .background(colorCellHidden, defaultRoundedCornerShape)
                             .border(
                                 1.dp,
-                                if (difficulty.value == GameDifficulty.EASY) lightGray else Color.Transparent,
+                                if (difficulty.value == GameDifficulty.EASY) colorForeground else Color.Transparent,
                                 defaultRoundedCornerShape
                             )
                             .noRippleClickable {
@@ -230,14 +230,14 @@ fun SettingsDialog(
                                 mapHeight.value.toInt()
                             ).toString(),
                             fontFamily = fontFamily,
-                            color = lightGray,
+                            color = colorForeground,
                             fontSize = FONT_SIZE.sp
                         )
 
                         Icon(
                             imageVector = IconMines,
                             contentDescription = null,
-                            tint = lightGray,
+                            tint = colorForeground,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -251,7 +251,7 @@ fun SettingsDialog(
                             .background(colorCellHidden, defaultRoundedCornerShape)
                             .border(
                                 1.dp,
-                                if (difficulty.value == GameDifficulty.MEDIUM) lightGray else Color.Transparent,
+                                if (difficulty.value == GameDifficulty.MEDIUM) colorForeground else Color.Transparent,
                                 defaultRoundedCornerShape
                             )
                             .noRippleClickable {
@@ -265,14 +265,14 @@ fun SettingsDialog(
                                 mapHeight.value.toInt()
                             ).toString(),
                             fontFamily = fontFamily,
-                            color = lightGray,
+                            color = colorForeground,
                             fontSize = FONT_SIZE.sp
                         )
 
                         Icon(
                             imageVector = IconMines,
                             contentDescription = null,
-                            tint = lightGray,
+                            tint = colorForeground,
                             modifier = Modifier.size(20.dp)
                         )
                     }
@@ -286,7 +286,7 @@ fun SettingsDialog(
                             .background(colorCellHidden, defaultRoundedCornerShape)
                             .border(
                                 1.dp,
-                                if (difficulty.value == GameDifficulty.HARD) lightGray else Color.Transparent,
+                                if (difficulty.value == GameDifficulty.HARD) colorForeground else Color.Transparent,
                                 defaultRoundedCornerShape
                             )
                             .noRippleClickable {
@@ -300,14 +300,14 @@ fun SettingsDialog(
                                 mapHeight.value.toInt()
                             ).toString(),
                             fontFamily = fontFamily,
-                            color = lightGray,
+                            color = colorForeground,
                             fontSize = FONT_SIZE.sp
                         )
 
                         Icon(
                             imageVector = IconMines,
                             contentDescription = null,
-                            tint = lightGray,
+                            tint = colorForeground,
                             modifier = Modifier.size(20.dp)
                         )
                     }

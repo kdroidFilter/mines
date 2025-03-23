@@ -36,7 +36,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import de.stefan_oltmann.mines.ui.theme.lightGray
+import de.stefan_oltmann.mines.ui.theme.colorForeground
 
 @Composable
 fun AppFooter(
@@ -62,7 +62,7 @@ fun AppFooter(
 
         Text(
             text = "made by Stefan Oltmann",
-            color = lightGray,
+            color = colorForeground,
             fontFamily = fontFamily,
             fontSize = 20.sp,
             textAlign = TextAlign.Center,

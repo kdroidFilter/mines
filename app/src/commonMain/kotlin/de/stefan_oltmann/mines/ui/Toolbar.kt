@@ -45,7 +45,7 @@ import de.stefan_oltmann.mines.ui.icons.IconTimer
 import de.stefan_oltmann.mines.ui.theme.DoubleSpacer
 import de.stefan_oltmann.mines.ui.theme.HalfSpacer
 import de.stefan_oltmann.mines.ui.theme.buttonSize
-import de.stefan_oltmann.mines.ui.theme.lightGray
+import de.stefan_oltmann.mines.ui.theme.colorForeground
 
 @Composable
 fun Toolbar(
@@ -76,7 +76,7 @@ fun Toolbar(
                 tint = if (highlightRestartButton)
                     Color.Yellow
                 else
-                    lightGray
+                    colorForeground
             )
         }
 
@@ -90,7 +90,7 @@ fun Toolbar(
             Icon(
                 imageVector = IconSettings,
                 contentDescription = null,
-                tint = lightGray
+                tint = colorForeground
             )
         }
 
@@ -108,7 +108,7 @@ fun Toolbar(
             Icon(
                 imageVector = IconDonate,
                 contentDescription = null,
-                tint = lightGray
+                tint = colorForeground
             )
         }
 
@@ -117,7 +117,7 @@ fun Toolbar(
         Icon(
             imageVector = IconTimer,
             contentDescription = null,
-            tint = lightGray
+            tint = colorForeground
         )
 
         HalfSpacer()
@@ -125,7 +125,7 @@ fun Toolbar(
         Text(
             text = elapsedSeconds.toString(),
             fontFamily = fontFamily,
-            color = lightGray,
+            color = colorForeground,
             fontSize = FONT_SIZE.sp,
             textAlign = TextAlign.Right,
             modifier = Modifier.widthIn(min = 20.dp)
@@ -136,7 +136,7 @@ fun Toolbar(
         Icon(
             imageVector = IconFlag,
             contentDescription = null,
-            tint = lightGray
+            tint = colorForeground
         )
 
         HalfSpacer()
@@ -144,7 +144,7 @@ fun Toolbar(
         Text(
             text = remainingFlagsCount.toString(),
             fontFamily = fontFamily,
-            color = lightGray,
+            color = colorForeground,
             fontSize = FONT_SIZE.sp,
             textAlign = TextAlign.Right,
             modifier = Modifier.widthIn(min = 20.dp)
