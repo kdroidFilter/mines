@@ -49,6 +49,7 @@ import de.stefan_oltmann.mines.ui.MinefieldCanvas
 import de.stefan_oltmann.mines.ui.SettingsDialog
 import de.stefan_oltmann.mines.ui.Toolbar
 import de.stefan_oltmann.mines.ui.lottie.ConfettiLottie
+import de.stefan_oltmann.mines.ui.lottie.ExplosionLottie
 import de.stefan_oltmann.mines.ui.theme.EconomicaFontFamily
 import de.stefan_oltmann.mines.ui.theme.colorBackground
 import de.stefan_oltmann.mines.ui.theme.colorCardBackground
@@ -228,8 +229,13 @@ fun App() {
                     }
                 )
 
-            if (gameState.gameWon && !showSettings.value)
-                ConfettiLottie()
+            if (showSettings.value)
+                return@Box
+
+            when {
+                gameState.gameWon -> ConfettiLottie()
+                gameState.gameOver -> ExplosionLottie()
+            }
         }
 
         AppFooter(fontFamily)
