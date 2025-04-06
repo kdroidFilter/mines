@@ -79,6 +79,9 @@ kotlin {
 
             /* Settings */
             implementation(libs.multiplatformSettings)
+
+            /* Lottie Animations */
+            implementation(libs.compottie)
         }
 
         jvmMain.dependencies {
