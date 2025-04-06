@@ -229,6 +229,7 @@ fun App() {
             val animationWidth = with(LocalDensity.current) { cardSize.width.toDp() } + doubleSpacing * 2
 
             when {
+
                 gameState.gameWon -> ConfettiLottie()
                 gameState.gameOver -> GameOverOverlay(
                     fontFamily = fontFamily,

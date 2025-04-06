@@ -1,6 +1,8 @@
 package de.stefan_oltmann.mines.ui
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import de.stefan_oltmann.mines.ui.lottie.ExplosionLottie
@@ -12,11 +14,14 @@ fun GameOverOverlay(
     animationWidth: Dp
 ) {
 
-    ExplosionLottie(animationWidth)
+    Box (contentAlignment = Alignment.Center) {
 
-    DelayedGameOverlayText(
-        text = "game over",
-        color = colorCardBorderGameOver,
-        fontFamily = fontFamily
-    )
+        ExplosionLottie(animationWidth)
+
+        DelayedGameOverlayText(
+            text = "game over",
+            color = colorCardBorderGameOver,
+            fontFamily = fontFamily
+        )
+    }
 }
