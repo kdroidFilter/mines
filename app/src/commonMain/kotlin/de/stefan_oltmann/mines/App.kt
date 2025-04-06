@@ -48,6 +48,7 @@ import de.stefan_oltmann.mines.ui.AppFooter
 import de.stefan_oltmann.mines.ui.MinefieldCanvas
 import de.stefan_oltmann.mines.ui.SettingsDialog
 import de.stefan_oltmann.mines.ui.Toolbar
+import de.stefan_oltmann.mines.ui.lottie.ConfettiLottie
 import de.stefan_oltmann.mines.ui.theme.EconomicaFontFamily
 import de.stefan_oltmann.mines.ui.theme.colorBackground
 import de.stefan_oltmann.mines.ui.theme.colorCardBackground
@@ -226,6 +227,9 @@ fun App() {
                         gameConfig.value = newGameSettings
                     }
                 )
+
+            if (gameState.gameWon && !showSettings.value)
+                ConfettiLottie()
         }
 
         AppFooter(fontFamily)
