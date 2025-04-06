@@ -32,4 +32,3 @@ fun Modifier.noRippleClickable(onClick: (() -> Unit)): Modifier = this
         interactionSource = remember { MutableInteractionSource() },
         onClick = onClick
     )
-

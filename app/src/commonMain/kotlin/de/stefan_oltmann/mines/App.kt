@@ -19,15 +19,11 @@
 
 package de.stefan_oltmann.mines
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.*
@@ -44,16 +40,7 @@ import de.stefan_oltmann.mines.model.GameDifficulty
 import de.stefan_oltmann.mines.model.GameState
 import de.stefan_oltmann.mines.ui.*
 import de.stefan_oltmann.mines.ui.lottie.ConfettiLottie
-import de.stefan_oltmann.mines.ui.lottie.ExplosionLottie
-import de.stefan_oltmann.mines.ui.theme.EconomicaFontFamily
-import de.stefan_oltmann.mines.ui.theme.colorBackground
-import de.stefan_oltmann.mines.ui.theme.colorCardBackground
-import de.stefan_oltmann.mines.ui.theme.colorCardBorder
-import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameOver
-import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameWon
-import de.stefan_oltmann.mines.ui.theme.defaultRoundedCornerShape
-import de.stefan_oltmann.mines.ui.theme.doublePadding
-import de.stefan_oltmann.mines.ui.theme.doubleSpacing
+import de.stefan_oltmann.mines.ui.theme.*
 
 @Composable
 fun App() {
