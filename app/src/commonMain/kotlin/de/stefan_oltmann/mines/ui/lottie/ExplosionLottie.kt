@@ -8,7 +8,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.unit.Dp
 import de.stefan_oltmann.mines.ui.theme.colorExplosion
-import io.github.alexzhirkevich.compottie.*
+import io.github.alexzhirkevich.compottie.DotLottie
+import io.github.alexzhirkevich.compottie.LottieCompositionSpec
+import io.github.alexzhirkevich.compottie.rememberLottieComposition
+import io.github.alexzhirkevich.compottie.rememberLottiePainter
 import mines.app.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
