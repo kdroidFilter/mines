@@ -11,12 +11,16 @@ import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameOver
 @Composable
 fun GameOverOverlay(
     fontFamily: FontFamily,
+    animationAlpha: Float,
     animationWidth: Dp
 ) {
 
     Box (contentAlignment = Alignment.Center) {
 
-        ExplosionLottie(animationWidth)
+        ExplosionLottie(
+            animationAlpha = animationAlpha,
+            animationWidth = animationWidth
+        )
 
         DelayedGameOverlayText(
             text = "game over",

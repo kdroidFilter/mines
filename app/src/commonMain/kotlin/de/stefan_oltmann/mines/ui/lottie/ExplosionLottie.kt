@@ -18,6 +18,7 @@ import org.jetbrains.compose.resources.ExperimentalResourceApi
 @OptIn(ExperimentalResourceApi::class)
 @Composable
 fun ExplosionLottie(
+    animationAlpha: Float,
     animationWidth: Dp
 ) {
 
@@ -33,12 +34,12 @@ fun ExplosionLottie(
         speed = 0.5f
     )
 
+    val animationColor = colorExplosion.copy(animationAlpha)
+
     Image(
         painter = painter,
         contentDescription = null,
-        colorFilter = ColorFilter.tint(
-            colorExplosion
-        ),
+        colorFilter = ColorFilter.tint(animationColor),
         modifier = Modifier.width(animationWidth)
     )
 }

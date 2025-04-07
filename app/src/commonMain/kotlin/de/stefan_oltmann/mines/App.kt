@@ -40,6 +40,7 @@ import de.stefan_oltmann.mines.model.GameDifficulty
 import de.stefan_oltmann.mines.model.GameState
 import de.stefan_oltmann.mines.ui.*
 import de.stefan_oltmann.mines.ui.lottie.ConfettiLottie
+import de.stefan_oltmann.mines.ui.lottie.ExplosionLottie
 import de.stefan_oltmann.mines.ui.theme.*
 
 @Composable
@@ -110,6 +111,15 @@ fun App() {
     redrawState.value
 
     Column {
+
+        /*
+         * Hack:
+         * Preload lottie animation to prevent delay on Android
+         */
+        ExplosionLottie(
+            animationAlpha = 0f,
+            animationWidth = 0.dp
+        )
 
         Box(
             contentAlignment = Alignment.Center,
@@ -233,6 +243,7 @@ fun App() {
                 gameState.gameWon -> ConfettiLottie()
                 gameState.gameOver -> GameOverOverlay(
                     fontFamily = fontFamily,
+                    animationAlpha = 1f,
                     animationWidth = animationWidth
                 )
             }
