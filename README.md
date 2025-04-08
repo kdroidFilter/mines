@@ -16,7 +16,7 @@ A simple mine puzzle game inspired by classic minesweeper, built using Kotlin Mu
 
 * JetBrains for making [Kotlin](https://kotlinlang.org).
 * Yahor for making the [Valkyrie IDEA plugin](https://github.com/ComposeGears/Valkyrie).
-* Alexzhirkevich for making the library [compottie](https://github.com/alexzhirkevich/compottie?tab=readme-ov-file).
+* Alexander Zhirkevich for making [compottie](https://github.com/alexzhirkevich/compottie).
 
 ## Contributions
 
