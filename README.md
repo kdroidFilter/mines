@@ -32,3 +32,5 @@ guaranteeing the community the freedom to use, modify, and share the software.
 Icons are sourced from Google Material Design.
 
 The font used is licensed under the SIL Open Font License (OFL).
+
+The lottie files used are licensed under the Lottie Simple License (FL).
