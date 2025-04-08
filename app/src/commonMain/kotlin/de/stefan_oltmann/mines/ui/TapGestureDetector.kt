@@ -29,7 +29,6 @@ import androidx.compose.ui.input.pointer.PointerInputScope
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.util.fastAny
 import androidx.compose.ui.util.fastForEach
-import de.stefan_oltmann.mines.LONG_PRESS_TIMEOUT_MS
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex

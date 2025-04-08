@@ -61,10 +61,10 @@ import de.stefan_oltmann.mines.ui.theme.buttonSize
 import de.stefan_oltmann.mines.ui.theme.colorCardBackground
 import de.stefan_oltmann.mines.ui.theme.colorCardBorder
 import de.stefan_oltmann.mines.ui.theme.colorCellHidden
+import de.stefan_oltmann.mines.ui.theme.colorForeground
 import de.stefan_oltmann.mines.ui.theme.defaultRoundedCornerShape
 import de.stefan_oltmann.mines.ui.theme.defaultSpacing
 import de.stefan_oltmann.mines.ui.theme.doublePadding
-import de.stefan_oltmann.mines.ui.theme.colorForeground
 import de.stefan_oltmann.mines.ui.theme.sliderColors
 
 @Composable

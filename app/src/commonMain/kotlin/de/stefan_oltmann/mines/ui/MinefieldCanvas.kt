@@ -56,6 +56,7 @@ import de.stefan_oltmann.mines.ui.theme.colorCellHidden
 import de.stefan_oltmann.mines.ui.theme.colorCellHiddenPressed
 import de.stefan_oltmann.mines.ui.theme.colorEightAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorFiveAdjacentMines
+import de.stefan_oltmann.mines.ui.theme.colorForeground
 import de.stefan_oltmann.mines.ui.theme.colorFourAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorMine
 import de.stefan_oltmann.mines.ui.theme.colorOneAdjacentMine
@@ -63,7 +64,6 @@ import de.stefan_oltmann.mines.ui.theme.colorSevenAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorSixAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorThreeAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorTwoAdjacentMines
-import de.stefan_oltmann.mines.ui.theme.colorForeground
 import kotlin.math.PI
 import kotlin.math.cos
 import kotlin.math.sin
