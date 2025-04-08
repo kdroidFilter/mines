@@ -19,44 +19,29 @@
 
 package de.stefan_oltmann.mines
 
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
-import androidx.compose.foundation.horizontalScroll
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
 import de.stefan_oltmann.mines.model.GameConfig
 import de.stefan_oltmann.mines.model.GameDifficulty
 import de.stefan_oltmann.mines.model.GameState
-import de.stefan_oltmann.mines.ui.AppFooter
-import de.stefan_oltmann.mines.ui.MinefieldCanvas
-import de.stefan_oltmann.mines.ui.SettingsDialog
-import de.stefan_oltmann.mines.ui.Toolbar
-import de.stefan_oltmann.mines.ui.theme.EconomicaFontFamily
-import de.stefan_oltmann.mines.ui.theme.colorBackground
-import de.stefan_oltmann.mines.ui.theme.colorCardBackground
-import de.stefan_oltmann.mines.ui.theme.colorCardBorder
-import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameOver
-import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameWon
-import de.stefan_oltmann.mines.ui.theme.defaultRoundedCornerShape
-import de.stefan_oltmann.mines.ui.theme.doublePadding
-import de.stefan_oltmann.mines.ui.theme.doubleSpacing
+import de.stefan_oltmann.mines.ui.*
+import de.stefan_oltmann.mines.ui.lottie.ConfettiLottie
+import de.stefan_oltmann.mines.ui.lottie.preloadExplosionLottie
+import de.stefan_oltmann.mines.ui.theme.*
 
 @Composable
 fun App() {
@@ -141,13 +126,19 @@ fun App() {
                 else -> colorCardBorder
             }
 
+            var cardSize by remember { mutableStateOf((IntSize.Zero)) }
+
             Card(
                 colors = CardDefaults.cardColors().copy(
                     containerColor = colorCardBackground
                 ),
                 shape = defaultRoundedCornerShape,
                 border = BorderStroke(1.dp, borderColor),
-                modifier = Modifier.doublePadding()
+                modifier = Modifier
+                    .doublePadding()
+                    .onGloballyPositioned { coordinates ->
+                        cardSize = coordinates.size
+                    }
             ) {
 
                 Column(
@@ -226,6 +217,35 @@ fun App() {
                         gameConfig.value = newGameSettings
                     }
                 )
+
+            if (showSettings.value)
+                return@Box
+
+            /*
+             * Calculation of the Lottie animation width based on the card's width,
+             * with added padding for a better look.
+             * Reason: The animation stretched across the entire width, didn’t look good
+             * compared to the confetti, especially in very small or very large minefields.
+             */
+            val animationWidth = with(LocalDensity.current) { cardSize.width.toDp() } + doubleSpacing * 2
+
+            /*
+             * Hack:
+             * Preload lottie animation to prevent delay on Android
+             */
+            val explosionLottieComposition = preloadExplosionLottie()
+
+            when {
+
+                gameState.gameWon -> ConfettiLottie()
+                gameState.gameOver -> explosionLottieComposition?.let {
+                    GameOverOverlay(
+                        fontFamily = fontFamily,
+                        composition = it,
+                        animationWidth = animationWidth
+                    )
+                }
+            }
         }
 
         AppFooter(fontFamily)

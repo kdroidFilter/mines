@@ -38,6 +38,8 @@ val colorCardBorderGameWon = Color.Green
 
 val colorMine = Color.Red
 
+val colorExplosion = Color.Red
+
 val colorOneAdjacentMine = Color(0xFF64A8FF)
 val colorTwoAdjacentMines = Color(0xFF00C000)
 val colorThreeAdjacentMines = Color(0xFFFF6060)
