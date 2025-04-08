@@ -17,6 +17,8 @@ A simple mine puzzle game inspired by classic minesweeper, built using Kotlin Mu
 * JetBrains for making [Kotlin](https://kotlinlang.org).
 * Yahor for making the [Valkyrie IDEA plugin](https://github.com/ComposeGears/Valkyrie).
 * Alexander Zhirkevich for making [compottie](https://github.com/alexzhirkevich/compottie).
+* Shubh Dubey for making the [confetti animation](https://lottiefiles.com/free-animation/confetti-3ofTs67sBx).
+* Ilya Pavlov for making the [explosion animation](https://lottiefiles.com/free-animation/explosion-zGxOeQkBx7).
 
 ## Contributions
 
