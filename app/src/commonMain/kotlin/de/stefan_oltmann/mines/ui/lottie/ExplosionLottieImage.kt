@@ -13,8 +13,7 @@ fun ExplosionLottieImage(
 ) {
 
     val painter = rememberLottiePainter(
-        composition = explosionLottieComposition,
-        speed = 1.5f
+        composition = explosionLottieComposition
     )
 
     Image(
