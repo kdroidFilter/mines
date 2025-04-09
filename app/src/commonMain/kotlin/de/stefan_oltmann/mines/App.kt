@@ -63,10 +63,6 @@ import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameWon
 import de.stefan_oltmann.mines.ui.theme.defaultRoundedCornerShape
 import de.stefan_oltmann.mines.ui.theme.doublePadding
 import de.stefan_oltmann.mines.ui.theme.doubleSpacing
-import io.github.alexzhirkevich.compottie.DotLottie
-import io.github.alexzhirkevich.compottie.LottieCompositionSpec
-import io.github.alexzhirkevich.compottie.rememberLottieComposition
-import mines.app.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
@@ -256,26 +252,14 @@ fun App() {
              */
             val animationWidth = with(LocalDensity.current) { cardSize.width.toDp() } + doubleSpacing * 2
 
-            /*
-             * Preload lottie animation to prevent delay on Android
-             */
-            val explosionLottieComposition by rememberLottieComposition {
-
-                LottieCompositionSpec.DotLottie(
-                    archive = Res.readBytes("files/explosion.lottie")
-                )
-            }
-
             when {
 
                 gameState.gameWon -> ConfettiLottie()
-                gameState.gameOver -> explosionLottieComposition?.let {
+                gameState.gameOver ->
                     GameOverOverlay(
                         fontFamily = fontFamily,
-                        composition = it,
                         animationWidth = animationWidth
                     )
-                }
             }
         }
 

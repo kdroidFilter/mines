@@ -7,19 +7,16 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.Dp
 import de.stefan_oltmann.mines.ui.lottie.ExplosionLottie
 import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameOver
-import io.github.alexzhirkevich.compottie.LottieComposition
 
 @Composable
 fun GameOverOverlay(
     fontFamily: FontFamily,
-    composition: LottieComposition,
     animationWidth: Dp
 ) {
 
     Box (contentAlignment = Alignment.Center) {
 
         ExplosionLottie(
-            composition = composition,
             animationWidth = animationWidth
         )
 

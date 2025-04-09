@@ -35,7 +35,7 @@ fun DelayedGameOverlayText(
 
     LaunchedEffect(Unit) {
 
-        delay(500)
+        delay(300)
 
         showText = true
     }
