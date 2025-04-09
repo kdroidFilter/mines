@@ -223,6 +223,12 @@ class Minefield(
                 }
             }
 
+        fun calcProtectedXRange(width: Int) =
+            width / 2 - 1..width / 2 + 1
+
+        fun calcProtectedYRange(height: Int) =
+            height / 2 - 1..height / 2 + 1
+
         private fun placeMines(
             matrix: Array<Array<CellType>>,
             width: Int,
@@ -236,8 +242,8 @@ class Minefield(
              */
             val random = Random(seed)
 
-            val protectedXRange = width / 2 - 1..width / 2 + 1
-            val protectedYRange = height / 2 - 1..height / 2 + 1
+            val protectedXRange = calcProtectedXRange(width)
+            val protectedYRange = calcProtectedYRange(height)
 
             var placedMinesCount = 0
 
