@@ -223,8 +223,21 @@ class Minefield(
                 }
             }
 
-        fun calcProtectedRange(length: Int): IntRange =
-            length / 2 - 1..length / 2 + if (length % 2 == 1) 1 else 0
+        /* Calculates a centered protected range that scales with board size */
+        fun calcProtectedRange(length: Int): IntRange {
+
+            val targetSize = (length * 0.3).toInt().coerceAtLeast(2)
+
+            val protectedSize =
+                if (targetSize % 2 == length % 2)
+                    targetSize
+                else
+                    targetSize + 1
+
+            val start = (length - protectedSize) / 2
+
+            return start until (start + protectedSize)
+        }
 
         private fun placeMines(
             matrix: Array<Array<CellType>>,

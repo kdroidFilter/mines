@@ -54,7 +54,6 @@ import de.stefan_oltmann.mines.ui.theme.colorCardBackground
 import de.stefan_oltmann.mines.ui.theme.colorCellBorder
 import de.stefan_oltmann.mines.ui.theme.colorCellHidden
 import de.stefan_oltmann.mines.ui.theme.colorCellHiddenPressed
-import de.stefan_oltmann.mines.ui.theme.colorCellHiddenProtected
 import de.stefan_oltmann.mines.ui.theme.colorEightAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorFiveAdjacentMines
 import de.stefan_oltmann.mines.ui.theme.colorForeground
@@ -170,8 +169,8 @@ fun MinefieldCanvas(
          */
         redrawState.value
 
-        val protectedXRange = Minefield.calcProtectedRange(minefield.width)
-        val protectedYRange = Minefield.calcProtectedRange(minefield.height)
+//        val protectedXRange = Minefield.calcProtectedRange(minefield.width)
+//        val protectedYRange = Minefield.calcProtectedRange(minefield.height)
 
         for (x in 0 until minefield.width) {
             for (y in 0 until minefield.height) {
@@ -202,12 +201,12 @@ fun MinefieldCanvas(
                             pressedPositionValue.x == x &&
                             pressedPositionValue.y == y
 
-                    val protected = x in protectedXRange && y in protectedYRange
+                    // val protected = x in protectedXRange && y in protectedYRange
 
                     drawRoundRect(
                         color = when {
                             pressed -> colorCellHiddenPressed
-                            protected -> colorCellHiddenProtected
+                            // protected -> colorCellHiddenProtected
                             else -> colorCellHidden
                         },
                         topLeft = offset,
