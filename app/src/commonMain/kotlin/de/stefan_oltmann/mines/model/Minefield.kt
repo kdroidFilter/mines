@@ -223,16 +223,8 @@ class Minefield(
                 }
             }
 
-        /* Calculates the X range of the protected middle area */
-        fun calcProtectedRange(length: Int): IntRange {
-            return if (length % 2 == 0) {
-                val start = length / 2 - 1
-                start..start + 1
-            } else {
-                val center = length / 2
-                center - 1..center + 1
-            }
-        }
+        fun calcProtectedRange(length: Int): IntRange =
+            length / 2 - 1..length / 2 + if (length % 2 == 1) 1 else 0
 
         private fun placeMines(
             matrix: Array<Array<CellType>>,
