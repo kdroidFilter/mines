@@ -170,8 +170,8 @@ fun MinefieldCanvas(
          */
         redrawState.value
 
-        val protectedXRange = Minefield.calcProtectedXRange(minefield.width)
-        val protectedYRange = Minefield.calcProtectedYRange(minefield.height)
+        val protectedXRange = Minefield.calcProtectedRange(minefield.width)
+        val protectedYRange = Minefield.calcProtectedRange(minefield.height)
 
         for (x in 0 until minefield.width) {
             for (y in 0 until minefield.height) {

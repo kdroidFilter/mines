@@ -223,11 +223,16 @@ class Minefield(
                 }
             }
 
-        fun calcProtectedXRange(width: Int) =
-            width / 2 - 1..width / 2 + 1
-
-        fun calcProtectedYRange(height: Int) =
-            height / 2 - 1..height / 2 + 1
+        /* Calculates the X range of the protected middle area */
+        fun calcProtectedRange(length: Int): IntRange {
+            return if (length % 2 == 0) {
+                val start = length / 2 - 1
+                start..start + 1
+            } else {
+                val center = length / 2
+                center - 1..center + 1
+            }
+        }
 
         private fun placeMines(
             matrix: Array<Array<CellType>>,
@@ -242,8 +247,8 @@ class Minefield(
              */
             val random = Random(seed)
 
-            val protectedXRange = calcProtectedXRange(width)
-            val protectedYRange = calcProtectedYRange(height)
+            val protectedXRange = calcProtectedRange(width)
+            val protectedYRange = calcProtectedRange(height)
 
             var placedMinesCount = 0
 
