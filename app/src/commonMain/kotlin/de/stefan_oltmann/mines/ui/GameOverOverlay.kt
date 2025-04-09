@@ -20,7 +20,7 @@ fun GameOverOverlay(
             explosionLottieComposition = explosionLottieComposition,
         )
 
-        DelayedGameOverlayText(
+        DelayedGameOverText(
             text = "game over",
             color = colorCardBorderGameOver,
             fontFamily = fontFamily

@@ -25,7 +25,7 @@ import de.stefan_oltmann.mines.ui.theme.doublePadding
 import kotlinx.coroutines.delay
 
 @Composable
-fun DelayedGameOverlayText(
+fun DelayedGameOverText(
     text: String,
     color: Color,
     fontFamily: FontFamily
@@ -35,7 +35,7 @@ fun DelayedGameOverlayText(
 
     LaunchedEffect(Unit) {
 
-        delay(300)
+        delay(500)
 
         showText = true
     }
