@@ -40,7 +40,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.get
@@ -53,7 +52,7 @@ import de.stefan_oltmann.mines.ui.GameOverOverlay
 import de.stefan_oltmann.mines.ui.MinefieldCanvas
 import de.stefan_oltmann.mines.ui.SettingsDialog
 import de.stefan_oltmann.mines.ui.Toolbar
-import de.stefan_oltmann.mines.ui.lottie.ConfettiLottie
+import de.stefan_oltmann.mines.ui.lottie.ConfettiLottieImage
 import de.stefan_oltmann.mines.ui.theme.EconomicaFontFamily
 import de.stefan_oltmann.mines.ui.theme.colorBackground
 import de.stefan_oltmann.mines.ui.theme.colorCardBackground
@@ -63,6 +62,10 @@ import de.stefan_oltmann.mines.ui.theme.colorCardBorderGameWon
 import de.stefan_oltmann.mines.ui.theme.defaultRoundedCornerShape
 import de.stefan_oltmann.mines.ui.theme.doublePadding
 import de.stefan_oltmann.mines.ui.theme.doubleSpacing
+import io.github.alexzhirkevich.compottie.DotLottie
+import io.github.alexzhirkevich.compottie.LottieCompositionSpec
+import io.github.alexzhirkevich.compottie.rememberLottieComposition
+import mines.app.generated.resources.Res
 import org.jetbrains.compose.resources.ExperimentalResourceApi
 
 @OptIn(ExperimentalResourceApi::class)
@@ -85,6 +88,24 @@ fun App() {
     }
 
     val redrawState = remember { mutableStateOf(0) }
+
+    /*
+     * Pre-load lotties to avoid delays in playback.
+     */
+
+    val confettiLottieComposition by rememberLottieComposition {
+
+        LottieCompositionSpec.DotLottie(
+            archive = Res.readBytes("files/confetti.lottie")
+        )
+    }
+
+    val explosionLottieComposition by rememberLottieComposition {
+
+        LottieCompositionSpec.DotLottie(
+            archive = Res.readBytes("files/explosion.lottie")
+        )
+    }
 
     /*
      * Initially start a new game when opened.
@@ -226,6 +247,25 @@ fun App() {
                 }
             }
 
+            when {
+
+                gameState.gameWon ->
+                    confettiLottieComposition?.let { lottieComposition ->
+                        ConfettiLottieImage(lottieComposition)
+                    }
+
+                gameState.gameOver ->
+                    explosionLottieComposition?.let { lottieComposition ->
+                        GameOverOverlay(
+                            explosionLottieComposition = lottieComposition,
+                            fontFamily = fontFamily
+                        )
+                    }
+            }
+
+            /*
+             * The settings must overlay the "game over" text.
+             */
             if (showSettings.value)
                 SettingsDialog(
                     gameConfig = gameConfig.value,
@@ -240,27 +280,6 @@ fun App() {
                         gameConfig.value = newGameSettings
                     }
                 )
-
-            if (showSettings.value)
-                return@Box
-
-            /*
-             * Calculation of the Lottie animation width based on the card's width,
-             * with added padding for a better look.
-             * Reason: The animation stretched across the entire width, didn’t look good
-             * compared to the confetti, especially in very small or very large minefields.
-             */
-            val animationWidth = with(LocalDensity.current) { cardSize.width.toDp() } + doubleSpacing * 2
-
-            when {
-
-                gameState.gameWon -> ConfettiLottie()
-                gameState.gameOver ->
-                    GameOverOverlay(
-                        fontFamily = fontFamily,
-                        animationWidth = animationWidth
-                    )
-            }
         }
 
         AppFooter(fontFamily)
