@@ -26,6 +26,9 @@ import kotlinx.browser.document
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     ComposeViewport(document.body!!) {
+        appLoaded()
         App()
     }
 }
+
+external fun appLoaded()
