@@ -26,8 +26,3 @@ const val DEFAULT_CELL_SIZE: Int = 40
 const val FONT_SIZE: Int = 20
 
 const val LONG_PRESS_TIMEOUT_MS: Long = 200
-
-/*
- * Buggy right now.
- */
-const val ENABLED_CELL_SIZE_SETTING = true
