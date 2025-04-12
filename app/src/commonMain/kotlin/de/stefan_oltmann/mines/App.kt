@@ -118,15 +118,15 @@ fun App() {
 
         val newGameConfig = gameConfig.value
 
-        val oldMapWidth = settings["mapWidth"] ?: defaultMapWidth
-        val oldMapHeight = settings["mapHeight"] ?: defaultMapHeight
-        val oldDifficulty = GameDifficulty.valueOf(settings["difficulty"] ?: GameDifficulty.EASY.name)
+        val oldMapWidth = settings["mines_map_width"] ?: defaultMapWidth
+        val oldMapHeight = settings["mines_map_height"] ?: defaultMapHeight
+        val oldDifficulty = GameDifficulty.valueOf(settings["mines_difficulty"] ?: GameDifficulty.EASY.name)
 
         /* Save new settings to config */
-        settings["cellSize"] = newGameConfig.cellSize
-        settings["mapWidth"] = newGameConfig.mapWidth
-        settings["mapHeight"] = newGameConfig.mapHeight
-        settings["difficulty"] = newGameConfig.difficulty.name
+        settings["mines_cell_size"] = newGameConfig.cellSize
+        settings["mines_map_width"] = newGameConfig.mapWidth
+        settings["mines_map_height"] = newGameConfig.mapHeight
+        settings["mines_difficulty"] = newGameConfig.difficulty.name
 
         val mapSettingsChanged =
             oldMapWidth != newGameConfig.mapWidth ||
