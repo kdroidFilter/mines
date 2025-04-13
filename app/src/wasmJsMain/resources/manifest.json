@@ -1,7 +1,7 @@
 {
   "name": "Mines",
   "short_name": "Mines",
-  "description": "A Minesweeper game",
+  "description": "A simple mine puzzle game inspired by classic minesweeper, built using Kotlin Multiplatform.",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#ffffff",
@@ -21,6 +21,26 @@
       "src": "icon_512.png",
       "sizes": "512x512",
       "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "screenshot01.webp",
+      "type": "image/webp",
+      "sizes": "1080x2340",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screenshot02.webp",
+      "type": "image/webp",
+      "sizes": "1080x2340",
+      "form_factor": "narrow"
+    },
+    {
+      "src": "screenshot03.webp",
+      "type": "image/webp",
+      "sizes": "1080x2340",
+      "form_factor": "narrow"
     }
   ]
 }
