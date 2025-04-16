@@ -210,6 +210,8 @@ In general, follow the Clean Code practices.
 The following rules are complementary to the official Kotlin coding conventions  
 and the detekt rules defined in the project's `detekt.yml` file.
 
+You can also analyze existing code style and new code should blend in.
+
 1. **Indentation and Spacing**
     - Use 4 spaces for indentation (no tabs)
     - Maximum line length is 120 characters
