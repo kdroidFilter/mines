@@ -6,18 +6,17 @@ This document provides essential information for developers working on the Mines
 
 ### Project Overview
 
-Mines is a Kotlin Multiplatform project with Compose Multiplatform for UI.
-It targets multiple platforms:
+Mines is a KMP Minesweeper clone with Compose Multiplatform for UI.
+It follows the typical game rules.
 
+It targets multiple platforms:
 - Android
 - JVM (Desktop)
 - WebAssembly JS (Browser)
 
-It's a Minesweeper clone.
-
 ### Prerequisites
 
-- JDK 11, because of Android
+- JDK 11 (because of Android)
 - Android SDK (for Android builds)
 - Latest Gradle version
 
@@ -71,6 +70,10 @@ To run a specific test:
 ```bash
 ./gradlew test --tests "de.stefan_oltmann.mines.model.GameDifficultyTest"
 ```
+
+All tests should be placed into `commonTest` and be tested by running `./gradlew jvmTest`.
+
+There is no need to run `androidTest` or `wasmJsTest`. Just assume that they will work if `jvmTest` does.
 
 ### Adding New Tests
 
