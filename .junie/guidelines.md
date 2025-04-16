@@ -150,7 +150,64 @@ Version numbers are derived from Git tags.
 
 ### Code Style
 
-- See `CODE_STYLE.md` and follow these rules.
+In general, follow the Clean Code practices.
+
+The following rules are complementary to the official Kotlin coding conventions  
+and the detekt rules defined in the project's `detekt.yml` file.
+
+1. **Indentation and Spacing**
+    - Use 4 spaces for indentation (no tabs)
+    - Maximum line length is 120 characters
+    - Use blank lines to separate logical sections of code
+    - Use a single blank line between package declaration, imports, and class definition
+    - Use a single blank line between a function signature and its body (for multi-line bodies)
+
+2. **Naming Conventions**
+    - Constants: UPPER_SNAKE_CASE with `const val`
+    - Classes: PascalCase
+    - Functions and variables: camelCase
+    - Package names: lowercase with dots
+
+3. **Imports**
+    - Organize imports alphabetically
+    - Do not use wildcard imports
+
+4. **Function and Parameter Formatting**
+    - Align parameters in multi-line function declarations
+    - Use trailing commas in multi-line function calls
+
+5. **Type Declarations**
+    - Explicitly declare types (e.g., `Int`, `Long`) for public APIs
+    - Avoid relying on type inference for API boundaries
+
+6. **Braces**
+    - Opening braces go at the end of the line
+    - Closing braces go on their own line
+    - Always use braces, even for single-line control structures
+
+7. **String Templates**
+    - Prefer string templates (`"Value: $value"`) over string concatenation
+
+8. **Composable Functions**
+    - Annotate with `@Composable`
+    - Use PascalCase for Composable function names
+
+9. **Documentation**
+    - Use KDoc format (`/** */`) for documentation comments
+    - Document all public APIs
+
+10. **Forbidden Practices**
+    - Do not use `print` or `println` for logging; use a logger
+    - Do not remove `TODO`, `FIXME`, or `STOPSHIP` comments unless the issue is resolved
+    - Avoid magic numbers; use named constants
+
+11. **Comment Style**
+    - Use block comments (`/* */`) only; do not use line comments (`//`)
+    - In multi-line block comments:
+        - Align stars at the start of each line
+        - Include a space after each star
+    - For single-line block comments, use: `/* Comment */`
+    - Each file should start with a license header as a block comment
 
 ### Dependencies Management
 
