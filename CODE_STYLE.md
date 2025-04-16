@@ -4,31 +4,6 @@ This document outlines the code style rules to be followed when contributing to 
 
 These rules are mainly intended for AI agents to work properly.
 
-## Comment Style
-
-- Use block comments (`/* */`) exclusively, do not use line comments (`//`) to comment
-- Line comments (`//`) that were used to comment-out code should stay that way
-- For multi-line block comments, align stars at the beginning of each line
-- Include a space after the star in multi-line block comments
-- For single-line comments, use `/* Comment text */` format
-- Each file should include the standard license header as a block comment
-
-Example of proper multi-line block comment:
-
-```kotlin
-/*
- * This is a multi-line
- * block comment with aligned stars
- * and proper spacing.
- */
-```
-
-Example of proper single-line block comment:
-
-```kotlin
-/* This is a single-line block comment */
-```
-
 ## Code Style Rules
 
 In general, follow the Clean Code practices.
@@ -81,3 +56,26 @@ and the detekt rules defined in the project's `detekt.yml` file.
     - Avoid creating TODO, FIXME, and STOPSHIP markers in comments; but don't remove them until the issue has been resolved
     - Avoid magic numbers; use named constants instead
 
+## Comment Style
+
+- Use block comments (`/* */`) exclusively, do not use line comments (`//`)
+- For multi-line block comments, align stars at the beginning of each line
+- Include a space after the star in multi-line block comments
+- For single-line comments, use `/* Comment text */` format
+- Each file should include the standard license header as a block comment
+
+Example of proper multi-line block comment:
+
+```kotlin
+/*
+ * This is a multi-line
+ * block comment with aligned stars
+ * and proper spacing.
+ */
+```
+
+Example of proper single-line block comment:
+
+```kotlin
+/* This is a single-line block comment */
+```

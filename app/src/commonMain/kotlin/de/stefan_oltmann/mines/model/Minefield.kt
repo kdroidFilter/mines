@@ -26,8 +26,6 @@ class Minefield(
     val seed: Int
 ) {
 
-    // val id: String = "$width-$height-$mineCount-$seed"
-
     val width
         get() = config.mapWidth
 

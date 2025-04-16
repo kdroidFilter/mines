@@ -169,9 +169,6 @@ fun MinefieldCanvas(
          */
         redrawState.value
 
-//        val protectedXRange = Minefield.calcProtectedRange(minefield.width)
-//        val protectedYRange = Minefield.calcProtectedRange(minefield.height)
-
         for (x in 0 until minefield.width) {
             for (y in 0 until minefield.height) {
 
@@ -201,12 +198,9 @@ fun MinefieldCanvas(
                             pressedPositionValue.x == x &&
                             pressedPositionValue.y == y
 
-                    // val protected = x in protectedXRange && y in protectedYRange
-
                     drawRoundRect(
                         color = when {
                             pressed -> colorCellHiddenPressed
-                            // protected -> colorCellHiddenProtected
                             else -> colorCellHidden
                         },
                         topLeft = offset,

@@ -134,15 +134,13 @@ fun App() {
         if (mapSettingsChanged)
             gameState.restart(gameConfig.value)
 
-        // HACK
+        /* HACK */
         redrawState.value += 1
     }
 
     val elapsedSeconds by gameState.elapsedSeconds.collectAsState()
 
     val showSettings = remember { mutableStateOf(false) }
-
-    println("REDRAW")
 
     /*
      * Force redraw if state changes.
@@ -198,7 +196,7 @@ fun App() {
 
                             gameState.restart(gameConfig.value)
 
-                            // HACK
+                            /* FIXME This is a hack */
                             redrawState.value += 1
                         }
                     )
