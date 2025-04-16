@@ -112,17 +112,18 @@ import kotlin.test.assertEquals
 class GameDifficultyTest {
     @Test
     fun testCalcMineCount() {
-        // Test EASY difficulty (10%)
-        assertEquals(1, GameDifficulty.EASY.calcMineCount(3, 3)) // 9 cells * 10% = 0.9, rounded to 1
-        assertEquals(4, GameDifficulty.EASY.calcMineCount(10, 4)) // 40 cells * 10% = 4
 
-        // Test MEDIUM difficulty (15%)
-        assertEquals(1, GameDifficulty.MEDIUM.calcMineCount(3, 3)) // 9 cells * 15% = 1.35, rounded to 1
-        assertEquals(6, GameDifficulty.MEDIUM.calcMineCount(10, 4)) // 40 cells * 15% = 6
+        /* Test EASY difficulty (10%) */
+        assertEquals(1, GameDifficulty.EASY.calcMineCount(3, 3))
+        assertEquals(4, GameDifficulty.EASY.calcMineCount(10, 4))
 
-        // Test HARD difficulty (20%)
-        assertEquals(1, GameDifficulty.HARD.calcMineCount(3, 3)) // 9 cells * 20% = 1.8, rounded to 1
-        assertEquals(8, GameDifficulty.HARD.calcMineCount(10, 4)) // 40 cells * 20% = 8
+        /* Test MEDIUM difficulty (15%) */
+        assertEquals(1, GameDifficulty.MEDIUM.calcMineCount(3, 3))
+        assertEquals(6, GameDifficulty.MEDIUM.calcMineCount(10, 4))
+
+        /* Test HARD difficulty (20%) */
+        assertEquals(1, GameDifficulty.HARD.calcMineCount(3, 3))
+        assertEquals(8, GameDifficulty.HARD.calcMineCount(10, 4))
     }
 }
 ```
@@ -149,9 +150,7 @@ Version numbers are derived from Git tags.
 
 ### Code Style
 
-- The project uses detekt for static code analysis. See the rules in `detekt.yml`.
-- Always follow Clean Code principles.
-- Comment style should be block comments only; do not mix.
+- See `CODE_STYLE.md` and follow these rules.
 
 ### Dependencies Management
 
@@ -160,7 +159,7 @@ Dependencies are managed in `gradle/libs.versions.toml` using Gradle's version c
 ### UI Framework
 
 The project uses Compose Multiplatform for UI, which allows sharing UI code across all platforms.
-Nothing can be used that's only working on a specific platform; like Android-only libraries or Swing/AWT.
+Nothing can be used that's only working on a specific platform, like Android-only libraries or Swing/AWT.
 
 ### Resources
 
