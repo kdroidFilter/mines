@@ -51,6 +51,8 @@ The project follows the Kotlin Multiplatform convention for tests:
 - `androidTest`: Android-specific tests
 - `wasmJsTest`: WebAssembly JS-specific tests
 
+Note that Desktop (JVM) is the primary development platform for this project.
+
 ### Running Tests
 
 To run all tests:
@@ -71,9 +73,9 @@ To run a specific test:
 ./gradlew test --tests "de.stefan_oltmann.mines.model.GameDifficultyTest"
 ```
 
-All tests should be placed into `commonTest` and be tested by running `./gradlew jvmTest`.
+All logic / non-UI tests should be placed into `commonTest` and be tested by running `./gradlew jvmTest`.
 
-There is no need to run `androidTest` or `wasmJsTest`. Just assume that they will work if `jvmTest` does.
+There is no need to run `androidTest` or `wasmJsTest`. Assume that they will work if `jvmTest` does.
 
 ### Adding New Tests
 
@@ -103,6 +105,56 @@ There is no need to run `androidTest` or `wasmJsTest`. Just assume that they wil
        implementation(libs.kotlin.test.junit)
    }
    ```
+
+### Compose UI Testing
+
+For UI testing in this project, use Compose Desktop UI testing framework - **NOT** Android UI testing. Desktop is the primary development platform, and we want to avoid the overhead of running tests in the Android emulator.
+
+To set up Compose Desktop UI testing:
+
+1. Add the necessary dependencies in `app/build.gradle.kts`:
+   ```kotlin
+   jvmTest.dependencies {
+       implementation(compose.desktop.uiTestJUnit4)
+       implementation(compose.desktop.currentOs)
+   }
+   ```
+
+2. Create UI tests in the `jvmTest` source set:
+   ```kotlin
+   class MyComposeUiTest {
+
+       @Test
+       fun testMyComposable() {
+
+           composeTestRule.setContent {
+               MyComposable()
+           }
+
+           /* Verify UI elements */
+           composeTestRule.onNodeWithText("Expected Text").assertIsDisplayed()
+
+           /* Perform actions */
+           composeTestRule.onNodeWithContentDescription("Button").performClick()
+
+           /* Verify state changes */
+           composeTestRule.onNodeWithText("Updated Text").assertIsDisplayed()
+       }
+   }
+   ```
+
+3. Set up the test rule:
+   ```kotlin
+   class MyComposeUiTest {
+
+       @get:Rule
+       val composeTestRule = createComposeRule()
+
+       /* Test methods */
+   }
+   ```
+
+For more details, refer to the [Compose Desktop UI Testing documentation](https://www.jetbrains.com.cn/en-us/help/kotlin-multiplatform-dev/compose-desktop-ui-testing.html).
 
 ### Example Test
 
@@ -169,9 +221,9 @@ and the detekt rules defined in the project's `detekt.yml` file.
             - Correct:
               ```
               fun calculateValue(param1: Int, param2: Int): Int {
-    
+
                   val result = param1 + param2
-    
+
                   return result
               }
               ```
