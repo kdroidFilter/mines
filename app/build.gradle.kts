@@ -85,6 +85,14 @@ kotlin {
             implementation(libs.compottie.dot)
         }
 
+        commonTest.dependencies {
+            implementation(libs.kotlin.test)
+        }
+
+        jvmTest.dependencies {
+            implementation(libs.kotlin.test.junit)
+        }
+
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
