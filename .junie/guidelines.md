@@ -166,3 +166,8 @@ Nothing can be used that's only working on a specific platform, like Android-onl
 - Lottie animations are used for visual effects (confetti, explosion)
 - Icons are sourced from Google Material Design
 - The font used is licensed under the SIL Open Font License (OFL)
+
+### Final checks
+
+- All code should compile. Actually run the tests to make sure it does.
+- Remove unused code and imports.
