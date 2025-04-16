@@ -24,16 +24,20 @@ html, body {
 .spinner {
     width: 60px;
     height: 60px;
-    border: 8px solid #333;         /* Dark gray ring */
-    border-top: 8px solid #bb86fc;  /* Accent ring (purple) */
+    border: 8px solid #333; /* Dark gray ring */
+    border-top: 8px solid #bb86fc; /* Accent ring (purple) */
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
 
 /* Spin animation */
 @keyframes spin {
-    0%   { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
 
 /* Main application content, hidden by default */

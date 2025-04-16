@@ -33,8 +33,8 @@
         window.addEventListener('load', () => {
             // Check if we're in development mode by looking for webpack dev server
             const isDevelopment = window.location.hostname === 'localhost' ||
-                                 window.location.hostname === '127.0.0.1' ||
-                                 window.location.port !== '';
+                window.location.hostname === '127.0.0.1' ||
+                window.location.port !== '';
 
             if (isDevelopment) {
                 // In development mode, unregister any existing service workers to prevent infinite loops
@@ -47,7 +47,7 @@
                 });
             } else {
                 // Only register service worker in production mode
-                navigator.serviceWorker.register('./service-worker.js', { updateViaCache: 'none' })
+                navigator.serviceWorker.register('./service-worker.js', {updateViaCache: 'none'})
                     .then(registration => {
                         console.log('Service Worker registered with scope:', registration.scope);
 
