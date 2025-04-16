@@ -36,11 +36,8 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
@@ -170,19 +167,13 @@ fun App() {
                 else -> colorCardBorder
             }
 
-            var cardSize by remember { mutableStateOf((IntSize.Zero)) }
-
             Card(
                 colors = CardDefaults.cardColors().copy(
                     containerColor = colorCardBackground
                 ),
                 shape = defaultRoundedCornerShape,
                 border = BorderStroke(1.dp, borderColor),
-                modifier = Modifier
-                    .doublePadding()
-                    .onGloballyPositioned { coordinates ->
-                        cardSize = coordinates.size
-                    }
+                modifier = Modifier.doublePadding()
             ) {
 
                 Column(
