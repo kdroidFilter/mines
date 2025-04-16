@@ -2,9 +2,12 @@
 
 This document outlines the code style rules to be followed when contributing to the Mines project.
 
+These rules are mainly intended for AI agents to work properly.
+
 ## Comment Style
 
-- Use block comments (`/* */`) exclusively, do not use line comments (`//`)
+- Use block comments (`/* */`) exclusively, do not use line comments (`//`) to comment
+- Line comments (`//`) that were used to comment-out code should stay that way
 - For multi-line block comments, align stars at the beginning of each line
 - Include a space after the star in multi-line block comments
 - For single-line comments, use `/* Comment text */` format
@@ -26,9 +29,12 @@ Example of proper single-line block comment:
 /* This is a single-line block comment */
 ```
 
-## Additional Code Style Rules
+## Code Style Rules
 
-Based on the existing codebase, the following code style rules are also observed:
+In general, follow the Clean Code practices.
+
+The following rules are complementary to the official Kotlin coding conventions
+and the detekt rules defined in the project's `detekt.yml` file.
 
 1. **Indentation and Spacing**
     - Use 4 spaces for indentation (no tabs)
@@ -72,7 +78,6 @@ Based on the existing codebase, the following code style rules are also observed
 
 10. **Forbidden Practices**
     - Avoid using `print` or `println` for logging (use a proper logger instead)
-    - Avoid TODO, FIXME, and STOPSHIP markers in comments
+    - Avoid creating TODO, FIXME, and STOPSHIP markers in comments; but don't remove them until the issue has been resolved
     - Avoid magic numbers; use named constants instead
 
-These rules are complementary to the official Kotlin coding conventions and the detekt rules defined in the project's `detekt.yml` file.
