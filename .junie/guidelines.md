@@ -161,6 +161,24 @@ and the detekt rules defined in the project's `detekt.yml` file.
     - Use blank lines to separate logical sections of code
     - Use a single blank line between package declaration, imports, and class definition
     - Use a single blank line between a function signature and its body (for multi-line bodies)
+        - This rule applies to ALL functions with multi-line bodies, including methods in test files
+        - Examples:
+            - Correct:
+              ```
+              fun calculateValue(param1: Int, param2: Int): Int {
+    
+                  val result = param1 + param2
+    
+                  return result
+              }
+              ```
+            - Incorrect:
+              ```
+              fun calculateValue(param1: Int, param2: Int): Int {
+                  val result = param1 + param2
+                  return result
+              }
+              ```
 
 2. **Naming Conventions**
     - Constants: UPPER_SNAKE_CASE with `const val`
@@ -202,12 +220,23 @@ and the detekt rules defined in the project's `detekt.yml` file.
     - Avoid magic numbers; use named constants
 
 11. **Comment Style**
-    - Use block comments (`/* */`) only; do not use line comments (`//`)
+    - Use block comments (`/* */`) only; do not use line comments (`//`) anywhere in the codebase
+        - This rule applies to ALL files, including test files and configuration files
     - In multi-line block comments:
         - Align stars at the start of each line
         - Include a space after each star
     - For single-line block comments, use: `/* Comment */`
     - Each file should start with a license header as a block comment
+    - Examples:
+        - Correct: `/* This is a comment */`
+        - Incorrect: `// This is a comment`
+        - Correct:
+          ```
+          /* 
+           * This is a multi-line comment
+           * with properly aligned stars
+           */
+          ```
 
 ### Dependencies Management
 
