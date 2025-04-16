@@ -56,12 +56,6 @@ kotlin {
 
     sourceSets {
 
-        val jvmMain by getting
-
-        androidMain.dependencies {
-            implementation(libs.androidx.activity.compose)
-        }
-
         commonMain.dependencies {
 
             /* Compose UI */
@@ -89,13 +83,19 @@ kotlin {
             implementation(libs.kotlin.test)
         }
 
-        jvmTest.dependencies {
-            implementation(libs.kotlin.test.junit)
+        androidMain.dependencies {
+            implementation(libs.androidx.activity.compose)
         }
 
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutines.swing)
+        }
+
+        jvmTest.dependencies {
+            implementation(libs.kotlin.test.junit)
+            implementation(compose.desktop.currentOs)
+            implementation(compose.desktop.uiTestJUnit4)
         }
     }
 }
