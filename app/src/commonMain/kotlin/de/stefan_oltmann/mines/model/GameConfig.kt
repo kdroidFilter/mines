@@ -19,9 +19,17 @@
 
 package de.stefan_oltmann.mines.model
 
+import de.stefan_oltmann.mines.MIN_LONG_SIDE
+
 data class GameConfig(
     val cellSize: Int,
     val mapWidth: Int,
     val mapHeight: Int,
     val difficulty: GameDifficulty
-)
+) {
+
+    init {
+        check(mapWidth >= MIN_LONG_SIDE) { "Map width must be greater than $MIN_LONG_SIDE." }
+        check(mapHeight >= MIN_LONG_SIDE) { "Map height must be greater than $MIN_LONG_SIDE." }
+    }
+}

@@ -25,8 +25,8 @@ const val MIN_CELL_SIZE: Int = 30
 const val MAX_CELL_SIZE: Int = 99
 const val DEFAULT_CELL_SIZE: Int = 40
 
-const val MIN_WIDTH: Int = 5
-const val MAX_WIDTH: Int = 50
+const val MIN_LONG_SIDE: Int = 5
+const val MAX_LONG_SIDE: Int = 50
 
 const val FONT_SIZE: Int = 20
 
