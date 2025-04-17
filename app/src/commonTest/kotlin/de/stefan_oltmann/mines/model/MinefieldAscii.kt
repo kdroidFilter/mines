@@ -19,8 +19,10 @@
 
 package de.stefan_oltmann.mines.model
 
+import de.stefan_oltmann.mines.DEFAULT_CELL_SIZE
+
 /**
- * Generates an ASCII representation of a minefield.
+ * Generates and parses ASCII representations of a minefield.
  *
  * Uses:
  * - O for empty fields
@@ -74,6 +76,47 @@ object MinefieldAscii {
         }
 
     /**
+     * Parses an ASCII representation of a minefield into a Minefield object.
+     *
+     * @param ascii The ASCII representation to parse
+     * @return The parsed Minefield object
+     */
+    fun fromAscii(ascii: String): Minefield {
+
+        val lines = ascii.trim().lines()
+
+        /* Parse the first line to get metadata */
+
+        val metadataParts = lines[0].split("|")
+
+        val difficulty = GameDifficulty.valueOf(metadataParts[0])
+        val width = metadataParts[1].toInt()
+        val height = metadataParts[2].toInt()
+        val seed = metadataParts[3].toInt()
+
+        /* Skip the separator line */
+        val matrixLines = lines.drop(2)
+
+        /* Create the matrix */
+        val matrix = Array(width) { x ->
+            Array(height) { y ->
+                val asciiChar = matrixLines[y][x]
+                getCellTypeFromChar(asciiChar)
+            }
+        }
+
+        /* Create the config */
+        val config = GameConfig(
+            cellSize = DEFAULT_CELL_SIZE, /* Default value, not stored in ASCII */
+            mapWidth = width,
+            mapHeight = height,
+            difficulty = difficulty
+        )
+
+        return Minefield(config, seed, matrix)
+    }
+
+    /**
      * Returns the ASCII character representation of a cell type.
      *
      * @param cellType The cell type to convert
@@ -91,5 +134,26 @@ object MinefieldAscii {
             CellType.SIX -> '6'
             CellType.SEVEN -> '7'
             CellType.EIGHT -> '8'
+        }
+
+    /**
+     * Returns the cell type for a given ASCII character.
+     *
+     * @param char The ASCII character to convert
+     * @return The corresponding cell type
+     */
+    private fun getCellTypeFromChar(char: Char): CellType =
+        when (char) {
+            'O' -> CellType.EMPTY
+            '*' -> CellType.MINE
+            '1' -> CellType.ONE
+            '2' -> CellType.TWO
+            '3' -> CellType.THREE
+            '4' -> CellType.FOUR
+            '5' -> CellType.FIVE
+            '6' -> CellType.SIX
+            '7' -> CellType.SEVEN
+            '8' -> CellType.EIGHT
+            else -> throw IllegalArgumentException("Unknown cell type character: $char")
         }
 }

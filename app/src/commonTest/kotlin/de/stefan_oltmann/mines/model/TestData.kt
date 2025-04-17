@@ -1,8 +1,10 @@
 package de.stefan_oltmann.mines.model
 
+import de.stefan_oltmann.mines.DEFAULT_CELL_SIZE
+
 val smallTestMinefield = Minefield.create(
     config = GameConfig(
-        cellSize = 10,
+        cellSize = DEFAULT_CELL_SIZE,
         mapWidth = 10,
         mapHeight = 10,
         difficulty = GameDifficulty.HARD
@@ -27,7 +29,7 @@ val smallTestMinefieldAscii = """
 
 val mediumTestMinefield = Minefield.create(
     config = GameConfig(
-        cellSize = 10,
+        cellSize = DEFAULT_CELL_SIZE,
         mapWidth = 25,
         mapHeight = 25,
         difficulty = GameDifficulty.MEDIUM
@@ -67,7 +69,7 @@ val mediumTestMinefieldAscii = """
 
 val largeTestMinefield = Minefield.create(
     config = GameConfig(
-        cellSize = 10,
+        cellSize = DEFAULT_CELL_SIZE,
         mapWidth = 50,
         mapHeight = 50,
         difficulty = GameDifficulty.EASY
