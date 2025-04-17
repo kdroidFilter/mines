@@ -23,7 +23,8 @@ import kotlin.random.Random
 
 class Minefield(
     val config: GameConfig,
-    val seed: Int
+    val seed: Int,
+    val matrix: Array<Array<CellType>>
 ) {
 
     val width
@@ -32,15 +33,28 @@ class Minefield(
     val height
         get() = config.mapHeight
 
-    private val matrix: Array<Array<CellType>> =
-        createMatrix(width, height, config.mineCount, seed)
-
-    fun getCellType(x: Int, y: Int): CellType = matrix[x][y]
+    fun getCellType(x: Int, y: Int): CellType =
+        matrix[x][y]
 
     fun isMine(x: Int, y: Int): Boolean =
         matrix[x][y] == CellType.MINE
 
     companion object {
+
+        fun create(
+            config: GameConfig,
+            seed: Int
+        ): Minefield =
+            Minefield(
+                config = config,
+                seed = seed,
+                matrix = createMatrix(
+                    width = config.mapWidth,
+                    height = config.mapHeight,
+                    mineCount = config.mineCount,
+                    seed = seed
+                )
+            )
 
         private fun createMatrix(
             width: Int,

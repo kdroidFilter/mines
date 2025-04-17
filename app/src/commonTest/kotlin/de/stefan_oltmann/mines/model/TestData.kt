@@ -1,6 +1,6 @@
 package de.stefan_oltmann.mines.model
 
-val smallTestMinefield = Minefield(
+val smallTestMinefield = Minefield.create(
     config = GameConfig(
         cellSize = 10,
         mapWidth = 10,
@@ -10,7 +10,7 @@ val smallTestMinefield = Minefield(
     seed = 4711
 )
 
-val mediumTestMinefield = Minefield(
+val mediumTestMinefield = Minefield.create(
     config = GameConfig(
         cellSize = 10,
         mapWidth = 25,
@@ -20,7 +20,7 @@ val mediumTestMinefield = Minefield(
     seed = 4242
 )
 
-val largeTestMinefield = Minefield(
+val largeTestMinefield = Minefield.create(
     config = GameConfig(
         cellSize = 10,
         mapWidth = 50,

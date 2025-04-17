@@ -89,7 +89,7 @@ class Game {
 
         gameState =
             GameState(
-                minefield = Minefield(
+                minefield = Minefield.create(
                     config = gameConfig,
                     seed = generateSeed()
                 )
