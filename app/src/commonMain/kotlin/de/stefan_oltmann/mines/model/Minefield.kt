@@ -32,20 +32,8 @@ class Minefield(
     val height
         get() = config.mapHeight
 
-    private val mineCount = config.difficulty.calcMineCount(width, height)
-
-    init {
-
-        /*
-         * Protection from infinite loop on mine placement.
-         */
-        check(mineCount <= width * height) {
-            "Too many mines. Wanted $mineCount, but must be less than ${width.times(height)}!"
-        }
-    }
-
     private val matrix: Array<Array<CellType>> =
-        createMatrix(width, height, mineCount, seed)
+        createMatrix(width, height, config.mineCount, seed)
 
     private val revealedMatrix: Array<Array<Boolean>> =
         Array(width) {
@@ -62,7 +50,7 @@ class Minefield(
         }
 
     fun getRemainingFlagsCount(): Int =
-        mineCount - flaggedMatrix.flatten().count { it }
+        config.mineCount - flaggedMatrix.flatten().count { it }
 
     fun isRevealed(x: Int, y: Int): Boolean =
         revealedMatrix[x][y]

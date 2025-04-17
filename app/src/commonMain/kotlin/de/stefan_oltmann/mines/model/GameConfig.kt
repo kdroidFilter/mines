@@ -29,7 +29,11 @@ data class GameConfig(
 ) {
 
     init {
-        check(mapWidth >= MIN_LONG_SIDE) { "Map width must be greater than $MIN_LONG_SIDE." }
-        check(mapHeight >= MIN_LONG_SIDE) { "Map height must be greater than $MIN_LONG_SIDE." }
+        /* Ensure no illegal configs can be created. */
+        require(mapWidth >= MIN_LONG_SIDE) { "Map width must be greater than $MIN_LONG_SIDE." }
+        require(mapHeight >= MIN_LONG_SIDE) { "Map height must be greater than $MIN_LONG_SIDE." }
     }
+
+    val mineCount = difficulty.calcMineCount(mapWidth, mapHeight)
+
 }
