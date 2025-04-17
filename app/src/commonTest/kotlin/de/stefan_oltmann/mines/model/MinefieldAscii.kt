@@ -38,8 +38,26 @@ object MinefieldAscii {
     fun toAscii(minefield: Minefield): String =
         buildString {
 
-            for (y in 0 until minefield.height) {
+            /* Print info */
+            append(minefield.config.difficulty)
+            append("|")
+            append(minefield.config.mapWidth)
+            append("|")
+            append(minefield.config.mapHeight)
+            append("|")
+            append(minefield.seed)
 
+            appendLine()
+
+            /* Separator line */
+            repeat(minefield.config.mapWidth) {
+                append("-")
+            }
+
+            appendLine()
+
+            /* Print matrix */
+            for (y in 0 until minefield.height) {
                 for (x in 0 until minefield.width) {
 
                     val cellType = minefield.getCellType(x, y)
@@ -61,9 +79,8 @@ object MinefieldAscii {
      * @param cellType The cell type to convert
      * @return The ASCII character representation
      */
-    private fun getCellTypeChar(cellType: CellType): Char {
-
-        return when (cellType) {
+    private fun getCellTypeChar(cellType: CellType): Char =
+        when (cellType) {
             CellType.EMPTY -> 'O'
             CellType.MINE -> '*'
             CellType.ONE -> '1'
@@ -75,5 +92,4 @@ object MinefieldAscii {
             CellType.SEVEN -> '7'
             CellType.EIGHT -> '8'
         }
-    }
 }
