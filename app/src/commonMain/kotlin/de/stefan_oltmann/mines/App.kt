@@ -122,25 +122,6 @@ fun App() {
         scrollToMiddleTrigger.value += 1
     }
 
-    /* Effect to scroll to the middle of the field when the trigger changes */
-    LaunchedEffect(scrollToMiddleTrigger.value) {
-
-        if (scrollToMiddleTrigger.value > 0) {
-
-            val cellSize = gameConfig.value.cellSize
-            val mapWidth = gameConfig.value.mapWidth
-            val mapHeight = gameConfig.value.mapHeight
-
-            /* Calculate the middle position of the field */
-            val horizontalScrollTarget = (mapWidth * cellSize / 2)
-            val verticalScrollTarget = (mapHeight * cellSize / 2)
-
-            /* Scroll to the middle position */
-            horizontalScrollState.scrollTo(horizontalScrollTarget)
-            verticalScrollState.scrollTo(verticalScrollTarget)
-        }
-    }
-
     LaunchedEffect(gameConfig.value) {
 
         val newGameConfig = gameConfig.value
@@ -161,11 +142,24 @@ fun App() {
                 oldDifficulty != newGameConfig.difficulty
 
         /* Launch a new game every time the settings change something that influences the map */
-        if (mapSettingsChanged)
+        if (mapSettingsChanged) {
+
             gameState.restart(gameConfig.value)
+
+            /* Trigger scrolling to the middle of the field */
+            scrollToMiddleTrigger.value += 1
+        }
 
         /* HACK */
         redrawState.value += 1
+    }
+
+    /* Effect to scroll to the middle of the field when the trigger changes */
+    LaunchedEffect(scrollToMiddleTrigger.value) {
+
+        horizontalScrollState.scrollTo(horizontalScrollState.maxValue / 2)
+
+        verticalScrollState.scrollTo(verticalScrollState.maxValue / 2)
     }
 
     val elapsedSeconds by gameState.elapsedSeconds.collectAsState()
