@@ -217,13 +217,11 @@ fun MinefieldCanvas(
                         style = cellStroke
                     )
 
-                    if (minefield.isFlagged(x, y)) {
-
+                    if (minefield.isFlagged(x, y))
                         drawFlag(
                             topLeft = offset,
                             size = innerCellSizeWithDensity
                         )
-                    }
                 }
             }
         }

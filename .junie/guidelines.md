@@ -173,9 +173,9 @@ Follow Clean Code practices and official Kotlin conventions plus these rules:
     - Example:
       ```kotlin
       fun calculateValue(param1: Int, param2: Int): Int {
- 
+
           val result = param1 + param2
- 
+
           return result
       }
       ```
@@ -192,7 +192,7 @@ Follow Clean Code practices and official Kotlin conventions plus these rules:
 
 5. **Type Declarations**: Explicit types for public APIs
 
-6. **Braces**: Opening at line end, closing on own line, always use braces
+6. **Braces**: Opening at line end, closing on own line, use braces for multi-line bodies only
 
 7. **String Templates**: Prefer `"Value: $value"` over concatenation
 
