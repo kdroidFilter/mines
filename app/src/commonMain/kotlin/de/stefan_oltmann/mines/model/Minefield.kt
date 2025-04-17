@@ -35,62 +35,22 @@ class Minefield(
     private val matrix: Array<Array<CellType>> =
         createMatrix(width, height, config.mineCount, seed)
 
-    private val revealedMatrix: Array<Array<Boolean>> =
-        Array(width) {
-            Array(height) {
-                false
-            }
-        }
-
-    private val flaggedMatrix: Array<Array<Boolean>> =
-        Array(width) {
-            Array(height) {
-                false
-            }
-        }
+    private val gameState = GameState(this)
 
     fun getRemainingFlagsCount(): Int =
-        config.mineCount - flaggedMatrix.flatten().count { it }
+        gameState.getRemainingFlagsCount()
 
     fun isRevealed(x: Int, y: Int): Boolean =
-        revealedMatrix[x][y]
+        gameState.isRevealed(x, y)
 
     /**
      * Check if all non-mine fields are revealed now.
      */
-    fun isAllRevealed(): Boolean {
-
-        for (x in 0 until width)
-            for (y in 0 until height)
-                if (!isMine(x, y) && !isRevealed(x, y))
-                    return false
-
-        return true
-    }
+    fun isAllRevealed(): Boolean =
+        gameState.isAllRevealed()
 
     fun reveal(x: Int, y: Int) {
-
-        /* Ignore call if coordinates are already revealed. */
-        if (revealedMatrix[x][y])
-            return
-
-        /* Mark the current cell as revealed */
-        revealedMatrix[x][y] = true
-
-        /* Remove any flags that may have set on non-minefields. */
-        flaggedMatrix[x][y] = false
-
-        /* If the cell is empty, recursively reveal adjacent cells */
-        if (matrix[x][y] == CellType.EMPTY) {
-
-            performOnAdjacentCells(x, y) { adjX, adjY ->
-
-                if (isRevealed(adjX, adjY))
-                    return@performOnAdjacentCells
-
-                reveal(adjX, adjY)
-            }
-        }
+        gameState.reveal(x, y)
     }
 
     /**
@@ -98,91 +58,24 @@ class Minefield(
      *
      * Returns if we hit a mine.
      */
-    fun revealAdjacentCells(x: Int, y: Int): Boolean {
-
-        val cellType = matrix[x][y]
-
-        /*
-         * Ignore non-number cells.
-         */
-        if (cellType == CellType.EMPTY || cellType == CellType.MINE)
-            return false
-
-        var hitMine = false
-
-        if (cellType.adjacentMineCount > 0) {
-
-            val adjacentFlags = countAdjacentFlags(x, y)
-
-            if (cellType.adjacentMineCount == adjacentFlags) {
-
-                performOnAdjacentCells(x, y) { adjX, adjY ->
-
-                    if (isRevealed(adjX, adjY) || isFlagged(adjX, adjY))
-                        return@performOnAdjacentCells
-
-                    reveal(adjX, adjY)
-
-                    /*
-                     * We want to reveal all adjacent cells,
-                     * so we don't immediately return here.
-                     */
-                    if (isMine(adjX, adjY))
-                        hitMine = true
-                }
-            }
-        }
-
-        return hitMine
-    }
+    fun revealAdjacentCells(x: Int, y: Int): Boolean =
+        gameState.revealAdjacentCells(x, y)
 
     fun isFlagged(x: Int, y: Int): Boolean =
-        flaggedMatrix[x][y]
+        gameState.isFlagged(x, y)
 
     fun toggleFlag(x: Int, y: Int) {
-        flaggedMatrix[x][y] = !flaggedMatrix[x][y]
+        gameState.toggleFlag(x, y)
     }
 
     fun flagAllMines() {
-
-        for (x in 0 until width)
-            for (y in 0 until height)
-                if (isMine(x, y))
-                    flaggedMatrix[x][y] = true
+        gameState.flagAllMines()
     }
 
     fun getCellType(x: Int, y: Int): CellType = matrix[x][y]
 
     fun isMine(x: Int, y: Int): Boolean =
         matrix[x][y] == CellType.MINE
-
-    private fun countAdjacentFlags(x: Int, y: Int): Int =
-        directionsOfAdjacentCells.count { (dx, dy) ->
-
-            val adjX = x + dx
-            val adjY = y + dy
-
-            isCellWithinBounds(adjX, adjY) && isFlagged(adjX, adjY)
-        }
-
-    private fun isCellWithinBounds(x: Int, y: Int): Boolean =
-        x in 0 until width && y in 0 until height
-
-    private fun performOnAdjacentCells(
-        x: Int,
-        y: Int,
-        action: (Int, Int) -> Unit
-    ) {
-
-        for ((dx, dy) in directionsOfAdjacentCells) {
-
-            val adjX = x + dx
-            val adjY = y + dy
-
-            if (isCellWithinBounds(adjX, adjY))
-                action(adjX, adjY)
-        }
-    }
 
     companion object {
 
