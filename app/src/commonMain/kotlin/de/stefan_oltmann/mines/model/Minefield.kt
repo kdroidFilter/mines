@@ -35,43 +35,6 @@ class Minefield(
     private val matrix: Array<Array<CellType>> =
         createMatrix(width, height, config.mineCount, seed)
 
-    private val gameState = GameState(this)
-
-    fun getRemainingFlagsCount(): Int =
-        gameState.getRemainingFlagsCount()
-
-    fun isRevealed(x: Int, y: Int): Boolean =
-        gameState.isRevealed(x, y)
-
-    /**
-     * Check if all non-mine fields are revealed now.
-     */
-    fun isAllRevealed(): Boolean =
-        gameState.isAllRevealed()
-
-    fun reveal(x: Int, y: Int) {
-        gameState.reveal(x, y)
-    }
-
-    /**
-     * Reveal adjacent cells around a number field.
-     *
-     * Returns if we hit a mine.
-     */
-    fun revealAdjacentCells(x: Int, y: Int): Boolean =
-        gameState.revealAdjacentCells(x, y)
-
-    fun isFlagged(x: Int, y: Int): Boolean =
-        gameState.isFlagged(x, y)
-
-    fun toggleFlag(x: Int, y: Int) {
-        gameState.toggleFlag(x, y)
-    }
-
-    fun flagAllMines() {
-        gameState.flagAllMines()
-    }
-
     fun getCellType(x: Int, y: Int): CellType = matrix[x][y]
 
     fun isMine(x: Int, y: Int): Boolean =

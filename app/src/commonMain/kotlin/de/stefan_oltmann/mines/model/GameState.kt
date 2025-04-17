@@ -23,7 +23,7 @@ package de.stefan_oltmann.mines.model
  * Represents the state of a game, including which cells are revealed and flagged.
  */
 class GameState(
-    private val minefield: Minefield
+    val minefield: Minefield
 ) {
 
     private val revealedMatrix: Array<Array<Boolean>> =
@@ -143,7 +143,6 @@ class GameState(
     }
 
     private fun countAdjacentFlags(x: Int, y: Int): Int =
-
         directionsOfAdjacentCells.count { (dx, dy) ->
             val adjX = x + dx
             val adjY = y + dy

@@ -211,7 +211,7 @@ fun App() {
                     Toolbar(
                         highlightRestartButton = game.gameOver || game.gameWon,
                         elapsedSeconds = elapsedSeconds,
-                        remainingFlagsCount = game.minefield?.getRemainingFlagsCount() ?: 0,
+                        remainingFlagsCount = game.gameState?.getRemainingFlagsCount() ?: 0,
                         fontFamily = fontFamily,
                         showSettings = {
                             showSettings.value = true
@@ -236,12 +236,12 @@ fun App() {
                                 .horizontalScroll(horizontalScrollState)
                         ) {
 
-                            val minefield = game.minefield
+                            val gameState = game.gameState
 
-                            if (minefield != null) {
+                            if (gameState != null) {
 
                                 MinefieldCanvas(
-                                    minefield,
+                                    gameState,
                                     gameConfig,
                                     redrawState,
                                     fontFamily,

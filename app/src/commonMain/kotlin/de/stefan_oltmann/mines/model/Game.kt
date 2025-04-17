@@ -43,7 +43,10 @@ class Game {
 
     var gameWon = false
 
-    var minefield: Minefield? = null
+    var gameState: GameState? = null
+
+    val minefield: Minefield?
+        get() = gameState?.minefield
 
     private fun generateSeed() =
         (1..Int.MAX_VALUE).random()
@@ -84,15 +87,18 @@ class Game {
         gameOver = false
         gameWon = false
 
-        minefield = Minefield(
-            config = gameConfig,
-            seed = generateSeed()
-        )
+        gameState =
+            GameState(
+                minefield = Minefield(
+                    config = gameConfig,
+                    seed = generateSeed()
+                )
+            )
     }
 
     fun hit(x: Int, y: Int) {
 
-        val minefield = minefield ?: return
+        val gameState = gameState ?: return
 
         /* Ignore further inputs if game ended. */
         if (gameOver || gameWon)
@@ -103,18 +109,18 @@ class Game {
             startTimer()
 
         /* Ignore clicks on flagged cells as these are most likely accidents. */
-        if (minefield.isFlagged(x, y))
+        if (gameState.isFlagged(x, y))
             return
 
-        val revealed = minefield.isRevealed(x, y)
+        val revealed = gameState.isRevealed(x, y)
 
         if (!revealed) {
 
             /* Reveal the field in any case */
-            minefield.reveal(x, y)
+            gameState.reveal(x, y)
 
             /* On hitting a mine the game is over. */
-            if (minefield.isMine(x, y)) {
+            if (gameState.minefield.isMine(x, y)) {
 
                 isTimerRunning = false
 
@@ -130,7 +136,7 @@ class Game {
          */
         if (revealed) {
 
-            val hitMineWhileRevealingAdjacentCells = minefield.revealAdjacentCells(x, y)
+            val hitMineWhileRevealingAdjacentCells = gameState.revealAdjacentCells(x, y)
 
             if (hitMineWhileRevealingAdjacentCells) {
 
@@ -143,13 +149,13 @@ class Game {
         }
 
         /* Check win condition */
-        if (minefield.isAllRevealed()) {
+        if (gameState.isAllRevealed()) {
 
             /*
              * Many games flag all remaining mines
              * for the finish screen.
              */
-            minefield.flagAllMines()
+            gameState.flagAllMines()
 
             isTimerRunning = false
 
@@ -159,7 +165,7 @@ class Game {
 
     fun flag(x: Int, y: Int) {
 
-        val minefield = minefield ?: return
+        val gameState = gameState ?: return
 
         /* Ignore further inputs if game ended. */
         if (gameOver || gameWon)
@@ -170,9 +176,9 @@ class Game {
             startTimer()
 
         /* Only non-revealed fields can be flagged. */
-        if (minefield.isRevealed(x, y))
+        if (gameState.isRevealed(x, y))
             return
 
-        minefield.toggleFlag(x, y)
+        gameState.toggleFlag(x, y)
     }
 }
