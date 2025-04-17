@@ -41,9 +41,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
+import de.stefan_oltmann.mines.model.Game
 import de.stefan_oltmann.mines.model.GameConfig
 import de.stefan_oltmann.mines.model.GameDifficulty
-import de.stefan_oltmann.mines.model.GameState
 import de.stefan_oltmann.mines.ui.AppFooter
 import de.stefan_oltmann.mines.ui.GameOverOverlay
 import de.stefan_oltmann.mines.ui.MinefieldCanvas
@@ -71,7 +71,7 @@ fun App() {
 
     val fontFamily = EconomicaFontFamily()
 
-    val gameState = remember { GameState() }
+    val game = remember { Game() }
 
     val gameConfig = remember {
         mutableStateOf(
@@ -116,7 +116,7 @@ fun App() {
      */
     LaunchedEffect(Unit) {
 
-        gameState.restart(gameConfig.value)
+        game.restart(gameConfig.value)
 
         /* Trigger scrolling to the middle of the field */
         scrollToMiddleTrigger.value += 1
@@ -144,7 +144,7 @@ fun App() {
         /* Launch a new game every time the settings change something that influences the map */
         if (mapSettingsChanged) {
 
-            gameState.restart(gameConfig.value)
+            game.restart(gameConfig.value)
 
             /* Trigger scrolling to the middle of the field */
             scrollToMiddleTrigger.value += 1
@@ -162,7 +162,7 @@ fun App() {
         verticalScrollState.scrollTo(verticalScrollState.maxValue / 2)
     }
 
-    val elapsedSeconds by gameState.elapsedSeconds.collectAsState()
+    val elapsedSeconds by game.elapsedSeconds.collectAsState()
 
     val showSettings = remember { mutableStateOf(false) }
 
@@ -184,8 +184,8 @@ fun App() {
         ) {
 
             val borderColor = when {
-                gameState.gameOver -> colorCardBorderGameOver
-                gameState.gameWon -> colorCardBorderGameWon
+                game.gameOver -> colorCardBorderGameOver
+                game.gameWon -> colorCardBorderGameWon
                 else -> colorCardBorder
             }
 
@@ -209,16 +209,16 @@ fun App() {
                 ) {
 
                     Toolbar(
-                        highlightRestartButton = gameState.gameOver || gameState.gameWon,
+                        highlightRestartButton = game.gameOver || game.gameWon,
                         elapsedSeconds = elapsedSeconds,
-                        remainingFlagsCount = gameState.minefield?.getRemainingFlagsCount() ?: 0,
+                        remainingFlagsCount = game.minefield?.getRemainingFlagsCount() ?: 0,
                         fontFamily = fontFamily,
                         showSettings = {
                             showSettings.value = true
                         },
                         restartGame = {
 
-                            gameState.restart(gameConfig.value)
+                            game.restart(gameConfig.value)
 
                             /* FIXME This is a hack */
                             redrawState.value += 1
@@ -236,7 +236,7 @@ fun App() {
                                 .horizontalScroll(horizontalScrollState)
                         ) {
 
-                            val minefield = gameState.minefield
+                            val minefield = game.minefield
 
                             if (minefield != null) {
 
@@ -245,8 +245,8 @@ fun App() {
                                     gameConfig,
                                     redrawState,
                                     fontFamily,
-                                    hit = { x, y -> gameState.hit(x, y) },
-                                    flag = { x, y -> gameState.flag(x, y) }
+                                    hit = { x, y -> game.hit(x, y) },
+                                    flag = { x, y -> game.flag(x, y) }
                                 )
                             }
                         }
@@ -262,12 +262,12 @@ fun App() {
 
             when {
 
-                gameState.gameWon ->
+                game.gameWon ->
                     confettiLottieComposition?.let { lottieComposition ->
                         ConfettiLottieImage(lottieComposition)
                     }
 
-                gameState.gameOver ->
+                game.gameOver ->
                     explosionLottieComposition?.let { lottieComposition ->
                         GameOverOverlay(
                             explosionLottieComposition = lottieComposition,

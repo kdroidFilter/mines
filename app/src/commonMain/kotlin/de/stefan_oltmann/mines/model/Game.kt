@@ -30,7 +30,7 @@ import kotlinx.datetime.Instant
 
 private val gameStateScope = CoroutineScope(Dispatchers.Default)
 
-class GameState {
+class Game {
 
     private val _elapsedSeconds = MutableStateFlow(0L)
     val elapsedSeconds = _elapsedSeconds.asStateFlow()
