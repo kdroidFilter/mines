@@ -76,15 +76,22 @@ fun App() {
     val gameConfig = remember {
         mutableStateOf(
             GameConfig(
-                cellSize = settings["cellSize"] ?: DEFAULT_CELL_SIZE,
-                mapWidth = settings["mapWidth"] ?: defaultMapWidth,
-                mapHeight = settings["mapHeight"] ?: defaultMapHeight,
-                difficulty = GameDifficulty.valueOf(settings["difficulty"] ?: GameDifficulty.EASY.name)
+                cellSize = settings["mines_cell_size"] ?: DEFAULT_CELL_SIZE,
+                mapWidth = settings["mines_map_width"] ?: defaultMapWidth,
+                mapHeight = settings["mines_map_height"] ?: defaultMapHeight,
+                difficulty = GameDifficulty.valueOf(settings["mines_difficulty"] ?: GameDifficulty.EASY.name)
             )
         )
     }
 
     val redrawState = remember { mutableStateOf(0) }
+
+    /* State to trigger scrolling to the middle of the field */
+    val scrollToMiddleTrigger = remember { mutableStateOf(0) }
+
+    /* Remember scroll states so they can be accessed from the restartGame lambda */
+    val verticalScrollState = rememberScrollState()
+    val horizontalScrollState = rememberScrollState()
 
     /*
      * Pre-load lotties to avoid delays in playback.
@@ -108,7 +115,30 @@ fun App() {
      * Initially start a new game when opened.
      */
     LaunchedEffect(Unit) {
+
         gameState.restart(gameConfig.value)
+
+        /* Trigger scrolling to the middle of the field */
+        scrollToMiddleTrigger.value += 1
+    }
+
+    /* Effect to scroll to the middle of the field when the trigger changes */
+    LaunchedEffect(scrollToMiddleTrigger.value) {
+
+        if (scrollToMiddleTrigger.value > 0) {
+
+            val cellSize = gameConfig.value.cellSize
+            val mapWidth = gameConfig.value.mapWidth
+            val mapHeight = gameConfig.value.mapHeight
+
+            /* Calculate the middle position of the field */
+            val horizontalScrollTarget = (mapWidth * cellSize / 2)
+            val verticalScrollTarget = (mapHeight * cellSize / 2)
+
+            /* Scroll to the middle position */
+            horizontalScrollState.scrollTo(horizontalScrollTarget)
+            verticalScrollState.scrollTo(verticalScrollTarget)
+        }
     }
 
     LaunchedEffect(gameConfig.value) {
@@ -198,13 +228,13 @@ fun App() {
 
                             /* FIXME This is a hack */
                             redrawState.value += 1
+
+                            /* Trigger scrolling to the middle of the field */
+                            scrollToMiddleTrigger.value += 1
                         }
                     )
 
                     Box {
-
-                        val verticalScrollState = rememberScrollState()
-                        val horizontalScrollState = rememberScrollState()
 
                         Box(
                             modifier = Modifier
