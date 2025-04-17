@@ -48,6 +48,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import de.stefan_oltmann.mines.FONT_SIZE
+import de.stefan_oltmann.mines.MAX_CELL_SIZE
+import de.stefan_oltmann.mines.MAX_WIDTH
+import de.stefan_oltmann.mines.MIN_CELL_SIZE
+import de.stefan_oltmann.mines.MIN_WIDTH
 import de.stefan_oltmann.mines.model.GameConfig
 import de.stefan_oltmann.mines.model.GameDifficulty
 import de.stefan_oltmann.mines.ui.icons.IconCancel
@@ -124,7 +128,7 @@ fun SettingsDialog(
                         onValueChange = {
                             cellSize.value = it
                         },
-                        valueRange = 30f..80f,
+                        valueRange = MIN_CELL_SIZE.toFloat()..MAX_CELL_SIZE.toFloat(),
                         colors = sliderColors,
                         modifier = Modifier.weight(1F)
                     )
@@ -156,7 +160,7 @@ fun SettingsDialog(
                         onValueChange = {
                             mapWidth.value = it
                         },
-                        valueRange = 5f..30f,
+                        valueRange = MIN_WIDTH.toFloat()..MAX_WIDTH.toFloat(),
                         colors = sliderColors,
                         modifier = Modifier.weight(1F)
                     )
@@ -188,7 +192,7 @@ fun SettingsDialog(
                         onValueChange = {
                             mapHeight.value = it
                         },
-                        valueRange = 5f..30f,
+                        valueRange = MIN_WIDTH.toFloat()..MAX_WIDTH.toFloat(),
                         colors = sliderColors,
                         modifier = Modifier.weight(1F)
                     )
