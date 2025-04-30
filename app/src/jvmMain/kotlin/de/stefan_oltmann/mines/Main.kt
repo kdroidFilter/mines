@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import de.stefan_oltmann.mines.ui.icons.AppIcon
+import io.github.kdroidfilter.platformtools.darkmodedetector.windows.setWindowsAdaptiveTitleBar
 import java.awt.Dimension
 
 fun main() = application {
@@ -32,7 +33,7 @@ fun main() = application {
         title = APP_TITLE,
         icon = rememberVectorPainter(AppIcon)
     ) {
-
+        window.setWindowsAdaptiveTitleBar(dark = true)
         /*
          * The layout breaks if we allow too small sizes.
          */

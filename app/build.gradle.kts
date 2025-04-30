@@ -68,6 +68,9 @@ kotlin {
             implementation(compose.ui)
             implementation(compose.components.resources)
 
+            /* Platform Tools */
+            implementation(libs.platformtools.darkmodedetector)
+
             /* Coroutines */
             implementation(libs.kotlinx.coroutines.core)
 
