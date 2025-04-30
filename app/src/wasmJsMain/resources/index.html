@@ -19,15 +19,6 @@
 </div>
 </body>
 <script>
-    // Function to hide the loader and show the app
-    function appLoaded() {
-        const loader = document.getElementById("loader");
-        const app = document.getElementById("app");
-        if (loader) loader.style.display = "none"; // Hide the loader
-        if (app) app.style.display = "block";     // Show the app
-        console.log("App is fully loaded!");
-    }
-
     // Register service worker for offline functionality
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', () => {
