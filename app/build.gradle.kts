@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidGitVersion)
+    id("dev.hydraulic.conveyor") version "1.12"
 }
 
 androidGitVersion {
@@ -28,6 +29,8 @@ kotlin {
     }
 
     jvm()
+
+    jvmToolchain(jdkVersion = 17)
 
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
@@ -166,16 +169,32 @@ compose.desktop {
             }
 
             macOS {
-                iconFile.set(project.file("icon/icon.icns"))
+                iconFile.set(project.file("../icon/icon.icns"))
             }
 
             windows {
-                iconFile.set(project.file("icon/icon.ico"))
+                iconFile.set(project.file("../icon/icon.ico"))
             }
 
             linux {
-                iconFile.set(project.file("icon/icon.png"))
+                iconFile.set(project.file("../icon/icon.png"))
             }
         }
     }
 }
+
+dependencies {
+    linuxAmd64(compose.desktop.linux_x64)
+    macAmd64(compose.desktop.macos_x64)
+    macAarch64(compose.desktop.macos_arm64)
+    windowsAmd64(compose.desktop.windows_x64)
+}
+
+// region Work around temporary Compose bugs.
+configurations.all {
+    attributes {
+        // https://github.com/JetBrains/compose-jb/issues/1404#issuecomment-1146894731
+        attribute(Attribute.of("ui", String::class.java), "awt")
+    }
+}
+// endregion

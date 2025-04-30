@@ -6,7 +6,6 @@ on:
       - '*'
 
 jobs:
-  
   build:
     name: Android
     runs-on: ubuntu-latest
