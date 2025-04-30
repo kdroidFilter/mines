@@ -19,11 +19,13 @@ Mines is a KMP Minesweeper clone with Compose Multiplatform for UI targeting And
 For all platforms: `./gradlew build`
 
 Platform-specific builds:
+
 - Android: `./gradlew assembleDebug` or `./gradlew assembleRelease`
 - Desktop: `./gradlew packageDistributionForCurrentOS`
 - Web: `./gradlew wasmJsBrowserDistribution`
 
 ### Running the Application
+
 - Android: Use IntelliJ IDEA with Android plugin or `./gradlew installDebug`
 - Desktop: `./gradlew run`
 - Web: `./gradlew wasmJsBrowserRun`
@@ -46,6 +48,7 @@ Note: Desktop (JVM) is the primary development platform.
 All tests: `./gradlew allTests`
 
 Platform-specific tests:
+
 - JVM: `./gradlew jvmTest`
 - Android: `./gradlew androidTest`
 - WebAssembly JS: `./gradlew wasmJsTest`
@@ -120,6 +123,7 @@ Setup:
 For details: [Compose Desktop UI Testing documentation](https://www.jetbrains.com.cn/en-us/help/kotlin-multiplatform-dev/compose-desktop-ui-testing.html)
 
 ### Example Test
+
 ```kotlin
 class GameDifficultyTest {
     @Test
@@ -143,6 +147,7 @@ class GameDifficultyTest {
 ## Additional Development Information
 
 ### Project Structure
+
 - `app/src/commonMain`: Shared code for all platforms
 - `app/src/androidMain`: Android-specific code
 - `app/src/jvmMain`: Desktop-specific code
