@@ -26,20 +26,22 @@ import de.stefan_oltmann.mines.ui.icons.AppIcon
 import io.github.kdroidfilter.platformtools.darkmodedetector.windows.setWindowsAdaptiveTitleBar
 import java.awt.Dimension
 
-fun main() = application {
+fun main() {
+    System.setProperty("apple.awt.application.appearance", "dark")
+    application {
+        Window(
+            onCloseRequest = ::exitApplication,
+            title = APP_TITLE,
+            icon = rememberVectorPainter(AppIcon)
+        ) {
+            window.setWindowsAdaptiveTitleBar(dark = true)
+            /*
+             * The layout breaks if we allow too small sizes.
+             */
+            this.window.minimumSize = Dimension(600, 600)
 
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = APP_TITLE,
-        icon = rememberVectorPainter(AppIcon)
-    ) {
-        window.setWindowsAdaptiveTitleBar(dark = true)
-        /*
-         * The layout breaks if we allow too small sizes.
-         */
-        this.window.minimumSize = Dimension(600, 600)
+            App()
 
-        App()
-
+        }
     }
 }
