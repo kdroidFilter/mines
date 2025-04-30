@@ -21,13 +21,13 @@ package de.stefan_oltmann.mines
 
 const val APP_TITLE = "Mines"
 
+const val MIN_CELL_SIZE: Int = 30
+const val MAX_CELL_SIZE: Int = 99
 const val DEFAULT_CELL_SIZE: Int = 40
+
+const val MIN_LONG_SIDE: Int = 5
+const val MAX_LONG_SIDE: Int = 50
 
 const val FONT_SIZE: Int = 20
 
 const val LONG_PRESS_TIMEOUT_MS: Long = 200
-
-/*
- * Buggy right now.
- */
-const val ENABLED_CELL_SIZE_SETTING = true

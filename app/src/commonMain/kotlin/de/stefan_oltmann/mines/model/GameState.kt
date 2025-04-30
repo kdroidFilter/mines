@@ -19,160 +19,153 @@
 
 package de.stefan_oltmann.mines.model
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import kotlinx.datetime.Clock
-import kotlinx.datetime.Instant
+/**
+ * Represents the state of a game, including which cells are revealed and flagged.
+ */
+class GameState(
+    val minefield: Minefield
+) {
 
-private val gameStateScope = CoroutineScope(Dispatchers.Default)
+    private val revealedMatrix: Array<Array<Boolean>> =
+        Array(minefield.width) {
+            Array(minefield.height) {
+                false
+            }
+        }
 
-class GameState {
+    private val flaggedMatrix: Array<Array<Boolean>> =
+        Array(minefield.width) {
+            Array(minefield.height) {
+                false
+            }
+        }
 
-    private val _elapsedSeconds = MutableStateFlow(0L)
-    val elapsedSeconds = _elapsedSeconds.asStateFlow()
+    fun getRemainingFlagsCount(): Int =
+        minefield.config.mineCount - flaggedMatrix.flatten().count { it }
 
-    private var gameStartTime = Instant.DISTANT_PAST
+    fun isRevealed(x: Int, y: Int): Boolean =
+        revealedMatrix[x][y]
 
-    private var isTimerRunning = false
+    /**
+     * Check if all non-mine fields are revealed now.
+     */
+    fun isAllRevealed(): Boolean {
 
-    var gameOver = false
+        for (x in 0 until minefield.width)
+            for (y in 0 until minefield.height)
+                if (!minefield.isMine(x, y) && !isRevealed(x, y))
+                    return false
 
-    var gameWon = false
+        return true
+    }
 
-    var minefield: Minefield? = null
+    fun reveal(x: Int, y: Int) {
 
-    private fun generateSeed() =
-        (1..Int.MAX_VALUE).random()
-
-    private fun startTimer() {
-
-        if (isTimerRunning)
+        /* Ignore call if coordinates are already revealed. */
+        if (revealedMatrix[x][y])
             return
 
-        isTimerRunning = true
+        /* Mark the current cell as revealed */
+        revealedMatrix[x][y] = true
 
-        gameStateScope.launch {
+        /* Remove any flags that may have set on non-minefields. */
+        flaggedMatrix[x][y] = false
 
-            gameStartTime = Clock.System.now()
+        /* If the cell is empty, recursively reveal adjacent cells */
+        if (minefield.getCellType(x, y) == CellType.EMPTY) {
 
-            while (isTimerRunning) {
+            performOnAdjacentCells(x, y) { adjX, adjY ->
 
-                /*
-                 * We try to prevent shifts that occur from delay() not being super-accurate.
-                 */
+                if (isRevealed(adjX, adjY))
+                    return@performOnAdjacentCells
 
-                val result = Clock.System.now() - gameStartTime
-
-                _elapsedSeconds.value = result.inWholeSeconds
-
-                delay(1000)
+                reveal(adjX, adjY)
             }
         }
     }
 
-    fun restart(
-        gameConfig: GameConfig
-    ) {
+    /**
+     * Reveal adjacent cells around a number field.
+     *
+     * Returns if we hit a mine.
+     */
+    fun revealAdjacentCells(x: Int, y: Int): Boolean {
 
-        isTimerRunning = false
-        _elapsedSeconds.value = 0
-
-        gameOver = false
-        gameWon = false
-
-        minefield = Minefield(
-            config = gameConfig,
-            seed = generateSeed()
-        )
-    }
-
-    fun hit(x: Int, y: Int) {
-
-        val minefield = minefield ?: return
-
-        /* Ignore further inputs if game ended. */
-        if (gameOver || gameWon)
-            return
-
-        /* Start timer on first interaction after reset. */
-        if (!isTimerRunning)
-            startTimer()
-
-        /* Ignore clicks on flagged cells as these are most likely accidents. */
-        if (minefield.isFlagged(x, y))
-            return
-
-        val revealed = minefield.isRevealed(x, y)
-
-        if (!revealed) {
-
-            /* Reveal the field in any case */
-            minefield.reveal(x, y)
-
-            /* On hitting a mine the game is over. */
-            if (minefield.isMine(x, y)) {
-
-                isTimerRunning = false
-
-                gameOver = true
-
-                return
-            }
-        }
+        val cellType = minefield.getCellType(x, y)
 
         /*
-         * Tapping on a revealed number should reveal all
-         * adjacent fields if a matching number of flags is set.
+         * Ignore non-number cells.
          */
-        if (revealed) {
+        if (cellType == CellType.EMPTY || cellType == CellType.MINE)
+            return false
 
-            val hitMineWhileRevealingAdjacentCells = minefield.revealAdjacentCells(x, y)
+        var hitMine = false
 
-            if (hitMineWhileRevealingAdjacentCells) {
+        if (cellType.adjacentMineCount > 0) {
 
-                isTimerRunning = false
+            val adjacentFlags = countAdjacentFlags(x, y)
 
-                gameOver = true
+            if (cellType.adjacentMineCount == adjacentFlags) {
 
-                return
+                performOnAdjacentCells(x, y) { adjX, adjY ->
+
+                    if (isRevealed(adjX, adjY) || isFlagged(adjX, adjY))
+                        return@performOnAdjacentCells
+
+                    reveal(adjX, adjY)
+
+                    /*
+                     * We want to reveal all adjacent cells,
+                     * so we don't immediately return here.
+                     */
+                    if (minefield.isMine(adjX, adjY))
+                        hitMine = true
+                }
             }
         }
 
-        /* Check win condition */
-        if (minefield.isAllRevealed()) {
-
-            /*
-             * Many games flag all remaining mines
-             * for the finish screen.
-             */
-            minefield.flagAllMines()
-
-            isTimerRunning = false
-
-            gameWon = true
-        }
+        return hitMine
     }
 
-    fun flag(x: Int, y: Int) {
+    fun isFlagged(x: Int, y: Int): Boolean =
+        flaggedMatrix[x][y]
 
-        val minefield = minefield ?: return
+    fun toggleFlag(x: Int, y: Int) {
+        flaggedMatrix[x][y] = !flaggedMatrix[x][y]
+    }
 
-        /* Ignore further inputs if game ended. */
-        if (gameOver || gameWon)
-            return
+    fun flagAllMines() {
 
-        /* Start timer on first interaction after reset. */
-        if (!isTimerRunning)
-            startTimer()
+        for (x in 0 until minefield.width)
+            for (y in 0 until minefield.height)
+                if (minefield.isMine(x, y))
+                    flaggedMatrix[x][y] = true
+    }
 
-        /* Only non-revealed fields can be flagged. */
-        if (minefield.isRevealed(x, y))
-            return
+    private fun countAdjacentFlags(x: Int, y: Int): Int =
+        directionsOfAdjacentCells.count { (dx, dy) ->
+            val adjX = x + dx
+            val adjY = y + dy
 
-        minefield.toggleFlag(x, y)
+            isCellWithinBounds(adjX, adjY) && isFlagged(adjX, adjY)
+        }
+
+    private fun isCellWithinBounds(x: Int, y: Int): Boolean =
+        x in 0 until minefield.width && y in 0 until minefield.height
+
+    private fun performOnAdjacentCells(
+        x: Int,
+        y: Int,
+        action: (Int, Int) -> Unit
+    ) {
+
+        for ((dx, dy) in directionsOfAdjacentCells) {
+
+            val adjX = x + dx
+            val adjY = y + dy
+
+            if (isCellWithinBounds(adjX, adjY))
+                action(adjX, adjY)
+        }
     }
 }

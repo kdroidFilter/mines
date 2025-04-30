@@ -49,7 +49,7 @@ import de.stefan_oltmann.mines.LONG_PRESS_TIMEOUT_MS
 import de.stefan_oltmann.mines.addRightClickListener
 import de.stefan_oltmann.mines.model.CellType
 import de.stefan_oltmann.mines.model.GameConfig
-import de.stefan_oltmann.mines.model.Minefield
+import de.stefan_oltmann.mines.model.GameState
 import de.stefan_oltmann.mines.ui.theme.colorCardBackground
 import de.stefan_oltmann.mines.ui.theme.colorCellBorder
 import de.stefan_oltmann.mines.ui.theme.colorCellHidden
@@ -76,7 +76,7 @@ private val cellStroke = Stroke(
 
 @Composable
 fun MinefieldCanvas(
-    minefield: Minefield,
+    gameState: GameState,
     gameConfig: MutableState<GameConfig>,
     redrawState: MutableState<Int>,
     fontFamily: FontFamily,
@@ -111,8 +111,8 @@ fun MinefieldCanvas(
     Canvas(
         modifier = Modifier
             .size(
-                width = (minefield.width * cellSize).dp,
-                height = (minefield.height * cellSize).dp
+                width = (gameState.minefield.width * cellSize).dp,
+                height = (gameState.minefield.height * cellSize).dp
             )
             .pointerInput(cellSizeWithDensity) {
                 detectTapGesturesMod(
@@ -169,20 +169,17 @@ fun MinefieldCanvas(
          */
         redrawState.value
 
-//        val protectedXRange = Minefield.calcProtectedRange(minefield.width)
-//        val protectedYRange = Minefield.calcProtectedRange(minefield.height)
-
-        for (x in 0 until minefield.width) {
-            for (y in 0 until minefield.height) {
+        for (x in 0 until gameState.minefield.width) {
+            for (y in 0 until gameState.minefield.height) {
 
                 val offset = Offset(
                     x * cellSizeWithDensity.width + cellPaddingWithDensity,
                     y * cellSizeWithDensity.height + cellPaddingWithDensity
                 )
 
-                if (minefield.isRevealed(x, y)) {
+                if (gameState.isRevealed(x, y)) {
 
-                    val cellType = minefield.getCellType(x, y)
+                    val cellType = gameState.minefield.getCellType(x, y)
 
                     drawRevealedCell(
                         cellType = cellType,
@@ -201,12 +198,9 @@ fun MinefieldCanvas(
                             pressedPositionValue.x == x &&
                             pressedPositionValue.y == y
 
-                    // val protected = x in protectedXRange && y in protectedYRange
-
                     drawRoundRect(
                         color = when {
                             pressed -> colorCellHiddenPressed
-                            // protected -> colorCellHiddenProtected
                             else -> colorCellHidden
                         },
                         topLeft = offset,
@@ -223,13 +217,11 @@ fun MinefieldCanvas(
                         style = cellStroke
                     )
 
-                    if (minefield.isFlagged(x, y)) {
-
+                    if (gameState.isFlagged(x, y))
                         drawFlag(
                             topLeft = offset,
                             size = innerCellSizeWithDensity
                         )
-                    }
                 }
             }
         }

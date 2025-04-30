@@ -36,17 +36,14 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import com.russhwolf.settings.get
 import com.russhwolf.settings.set
+import de.stefan_oltmann.mines.model.Game
 import de.stefan_oltmann.mines.model.GameConfig
 import de.stefan_oltmann.mines.model.GameDifficulty
-import de.stefan_oltmann.mines.model.GameState
 import de.stefan_oltmann.mines.ui.AppFooter
 import de.stefan_oltmann.mines.ui.GameOverOverlay
 import de.stefan_oltmann.mines.ui.MinefieldCanvas
@@ -74,20 +71,27 @@ fun App() {
 
     val fontFamily = EconomicaFontFamily()
 
-    val gameState = remember { GameState() }
+    val game = remember { Game() }
 
     val gameConfig = remember {
         mutableStateOf(
             GameConfig(
-                cellSize = settings["cellSize"] ?: DEFAULT_CELL_SIZE,
-                mapWidth = settings["mapWidth"] ?: defaultMapWidth,
-                mapHeight = settings["mapHeight"] ?: defaultMapHeight,
-                difficulty = GameDifficulty.valueOf(settings["difficulty"] ?: GameDifficulty.EASY.name)
+                cellSize = settings["mines_cell_size"] ?: DEFAULT_CELL_SIZE,
+                mapWidth = settings["mines_map_width"] ?: defaultMapWidth,
+                mapHeight = settings["mines_map_height"] ?: defaultMapHeight,
+                difficulty = GameDifficulty.valueOf(settings["mines_difficulty"] ?: GameDifficulty.EASY.name)
             )
         )
     }
 
     val redrawState = remember { mutableStateOf(0) }
+
+    /* State to trigger scrolling to the middle of the field */
+    val scrollToMiddleTrigger = remember { mutableStateOf(0) }
+
+    /* Remember scroll states so they can be accessed from the restartGame lambda */
+    val verticalScrollState = rememberScrollState()
+    val horizontalScrollState = rememberScrollState()
 
     /*
      * Pre-load lotties to avoid delays in playback.
@@ -111,22 +115,26 @@ fun App() {
      * Initially start a new game when opened.
      */
     LaunchedEffect(Unit) {
-        gameState.restart(gameConfig.value)
+
+        game.restart(gameConfig.value)
+
+        /* Trigger scrolling to the middle of the field */
+        scrollToMiddleTrigger.value += 1
     }
 
     LaunchedEffect(gameConfig.value) {
 
         val newGameConfig = gameConfig.value
 
-        val oldMapWidth = settings["mapWidth"] ?: defaultMapWidth
-        val oldMapHeight = settings["mapHeight"] ?: defaultMapHeight
-        val oldDifficulty = GameDifficulty.valueOf(settings["difficulty"] ?: GameDifficulty.EASY.name)
+        val oldMapWidth = settings["mines_map_width"] ?: defaultMapWidth
+        val oldMapHeight = settings["mines_map_height"] ?: defaultMapHeight
+        val oldDifficulty = GameDifficulty.valueOf(settings["mines_difficulty"] ?: GameDifficulty.EASY.name)
 
         /* Save new settings to config */
-        settings["cellSize"] = newGameConfig.cellSize
-        settings["mapWidth"] = newGameConfig.mapWidth
-        settings["mapHeight"] = newGameConfig.mapHeight
-        settings["difficulty"] = newGameConfig.difficulty.name
+        settings["mines_cell_size"] = newGameConfig.cellSize
+        settings["mines_map_width"] = newGameConfig.mapWidth
+        settings["mines_map_height"] = newGameConfig.mapHeight
+        settings["mines_difficulty"] = newGameConfig.difficulty.name
 
         val mapSettingsChanged =
             oldMapWidth != newGameConfig.mapWidth ||
@@ -134,18 +142,29 @@ fun App() {
                 oldDifficulty != newGameConfig.difficulty
 
         /* Launch a new game every time the settings change something that influences the map */
-        if (mapSettingsChanged)
-            gameState.restart(gameConfig.value)
+        if (mapSettingsChanged) {
 
-        // HACK
+            game.restart(gameConfig.value)
+
+            /* Trigger scrolling to the middle of the field */
+            scrollToMiddleTrigger.value += 1
+        }
+
+        /* HACK */
         redrawState.value += 1
     }
 
-    val elapsedSeconds by gameState.elapsedSeconds.collectAsState()
+    /* Effect to scroll to the middle of the field when the trigger changes */
+    LaunchedEffect(scrollToMiddleTrigger.value) {
+
+        horizontalScrollState.scrollTo(horizontalScrollState.maxValue / 2)
+
+        verticalScrollState.scrollTo(verticalScrollState.maxValue / 2)
+    }
+
+    val elapsedSeconds by game.elapsedSeconds.collectAsState()
 
     val showSettings = remember { mutableStateOf(false) }
-
-    println("REDRAW")
 
     /*
      * Force redraw if state changes.
@@ -165,12 +184,10 @@ fun App() {
         ) {
 
             val borderColor = when {
-                gameState.gameOver -> colorCardBorderGameOver
-                gameState.gameWon -> colorCardBorderGameWon
+                game.gameOver -> colorCardBorderGameOver
+                game.gameWon -> colorCardBorderGameWon
                 else -> colorCardBorder
             }
-
-            var cardSize by remember { mutableStateOf((IntSize.Zero)) }
 
             Card(
                 colors = CardDefaults.cardColors().copy(
@@ -178,11 +195,7 @@ fun App() {
                 ),
                 shape = defaultRoundedCornerShape,
                 border = BorderStroke(1.dp, borderColor),
-                modifier = Modifier
-                    .doublePadding()
-                    .onGloballyPositioned { coordinates ->
-                        cardSize = coordinates.size
-                    }
+                modifier = Modifier.doublePadding()
             ) {
 
                 Column(
@@ -196,26 +209,26 @@ fun App() {
                 ) {
 
                     Toolbar(
-                        highlightRestartButton = gameState.gameOver || gameState.gameWon,
+                        highlightRestartButton = game.gameOver || game.gameWon,
                         elapsedSeconds = elapsedSeconds,
-                        remainingFlagsCount = gameState.minefield?.getRemainingFlagsCount() ?: 0,
+                        remainingFlagsCount = game.gameState?.getRemainingFlagsCount() ?: 0,
                         fontFamily = fontFamily,
                         showSettings = {
                             showSettings.value = true
                         },
                         restartGame = {
 
-                            gameState.restart(gameConfig.value)
+                            game.restart(gameConfig.value)
 
-                            // HACK
+                            /* FIXME This is a hack */
                             redrawState.value += 1
+
+                            /* Trigger scrolling to the middle of the field */
+                            scrollToMiddleTrigger.value += 1
                         }
                     )
 
                     Box {
-
-                        val verticalScrollState = rememberScrollState()
-                        val horizontalScrollState = rememberScrollState()
 
                         Box(
                             modifier = Modifier
@@ -223,17 +236,17 @@ fun App() {
                                 .horizontalScroll(horizontalScrollState)
                         ) {
 
-                            val minefield = gameState.minefield
+                            val gameState = game.gameState
 
-                            if (minefield != null) {
+                            if (gameState != null) {
 
                                 MinefieldCanvas(
-                                    minefield,
+                                    gameState,
                                     gameConfig,
                                     redrawState,
                                     fontFamily,
-                                    hit = { x, y -> gameState.hit(x, y) },
-                                    flag = { x, y -> gameState.flag(x, y) }
+                                    hit = { x, y -> game.hit(x, y) },
+                                    flag = { x, y -> game.flag(x, y) }
                                 )
                             }
                         }
@@ -249,12 +262,12 @@ fun App() {
 
             when {
 
-                gameState.gameWon ->
+                game.gameWon ->
                     confettiLottieComposition?.let { lottieComposition ->
                         ConfettiLottieImage(lottieComposition)
                     }
 
-                gameState.gameOver ->
+                game.gameOver ->
                     explosionLottieComposition?.let { lottieComposition ->
                         GameOverOverlay(
                             explosionLottieComposition = lottieComposition,

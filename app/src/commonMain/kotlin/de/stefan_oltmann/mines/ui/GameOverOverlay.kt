@@ -14,7 +14,9 @@ fun GameOverOverlay(
     fontFamily: FontFamily
 ) {
 
-    Box(contentAlignment = Alignment.Center) {
+    Box(
+        contentAlignment = Alignment.Center
+    ) {
 
         ExplosionLottieImage(
             explosionLottieComposition = explosionLottieComposition,

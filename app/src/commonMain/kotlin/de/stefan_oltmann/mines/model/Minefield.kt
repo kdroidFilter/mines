@@ -23,10 +23,9 @@ import kotlin.random.Random
 
 class Minefield(
     val config: GameConfig,
-    val seed: Int
+    val seed: Int,
+    val matrix: Array<Array<CellType>>
 ) {
-
-    // val id: String = "$width-$height-$mineCount-$seed"
 
     val width
         get() = config.mapWidth
@@ -34,171 +33,28 @@ class Minefield(
     val height
         get() = config.mapHeight
 
-    private val mineCount = config.difficulty.calcMineCount(width, height)
-
-    init {
-
-        /*
-         * Protection from infinite loop on mine placement.
-         */
-        check(mineCount <= width * height) {
-            "Too many mines. Wanted $mineCount, but must be less than ${width.times(height)}!"
-        }
-    }
-
-    private val matrix: Array<Array<CellType>> =
-        createMatrix(width, height, mineCount, seed)
-
-    private val revealedMatrix: Array<Array<Boolean>> =
-        Array(width) {
-            Array(height) {
-                false
-            }
-        }
-
-    private val flaggedMatrix: Array<Array<Boolean>> =
-        Array(width) {
-            Array(height) {
-                false
-            }
-        }
-
-    fun getRemainingFlagsCount(): Int =
-        mineCount - flaggedMatrix.flatten().count { it }
-
-    fun isRevealed(x: Int, y: Int): Boolean =
-        revealedMatrix[x][y]
-
-    /**
-     * Check if all non-mine fields are revealed now.
-     */
-    fun isAllRevealed(): Boolean {
-
-        for (x in 0 until width)
-            for (y in 0 until height)
-                if (!isMine(x, y) && !isRevealed(x, y))
-                    return false
-
-        return true
-    }
-
-    fun reveal(x: Int, y: Int) {
-
-        /* Ignore call if coordinates are already revealed. */
-        if (revealedMatrix[x][y])
-            return
-
-        /* Mark the current cell as revealed */
-        revealedMatrix[x][y] = true
-
-        /* Remove any flags that may have set on non-minefields. */
-        flaggedMatrix[x][y] = false
-
-        /* If the cell is empty, recursively reveal adjacent cells */
-        if (matrix[x][y] == CellType.EMPTY) {
-
-            performOnAdjacentCells(x, y) { adjX, adjY ->
-
-                if (isRevealed(adjX, adjY))
-                    return@performOnAdjacentCells
-
-                reveal(adjX, adjY)
-            }
-        }
-    }
-
-    /**
-     * Reveal adjacent cells around a number field.
-     *
-     * Returns if we hit a mine.
-     */
-    fun revealAdjacentCells(x: Int, y: Int): Boolean {
-
-        val cellType = matrix[x][y]
-
-        /*
-         * Ignore non-number cells.
-         */
-        if (cellType == CellType.EMPTY || cellType == CellType.MINE)
-            return false
-
-        var hitMine = false
-
-        if (cellType.adjacentMineCount > 0) {
-
-            val adjacentFlags = countAdjacentFlags(x, y)
-
-            if (cellType.adjacentMineCount == adjacentFlags) {
-
-                performOnAdjacentCells(x, y) { adjX, adjY ->
-
-                    if (isRevealed(adjX, adjY) || isFlagged(adjX, adjY))
-                        return@performOnAdjacentCells
-
-                    reveal(adjX, adjY)
-
-                    /*
-                     * We want to reveal all adjacent cells,
-                     * so we don't immediately return here.
-                     */
-                    if (isMine(adjX, adjY))
-                        hitMine = true
-                }
-            }
-        }
-
-        return hitMine
-    }
-
-    fun isFlagged(x: Int, y: Int): Boolean =
-        flaggedMatrix[x][y]
-
-    fun toggleFlag(x: Int, y: Int) {
-        flaggedMatrix[x][y] = !flaggedMatrix[x][y]
-    }
-
-    fun flagAllMines() {
-
-        for (x in 0 until width)
-            for (y in 0 until height)
-                if (isMine(x, y))
-                    flaggedMatrix[x][y] = true
-    }
-
-    fun getCellType(x: Int, y: Int): CellType = matrix[x][y]
+    fun getCellType(x: Int, y: Int): CellType =
+        matrix[x][y]
 
     fun isMine(x: Int, y: Int): Boolean =
         matrix[x][y] == CellType.MINE
 
-    private fun countAdjacentFlags(x: Int, y: Int): Int =
-        directionsOfAdjacentCells.count { (dx, dy) ->
-
-            val adjX = x + dx
-            val adjY = y + dy
-
-            isCellWithinBounds(adjX, adjY) && isFlagged(adjX, adjY)
-        }
-
-    private fun isCellWithinBounds(x: Int, y: Int): Boolean =
-        x in 0 until width && y in 0 until height
-
-    private fun performOnAdjacentCells(
-        x: Int,
-        y: Int,
-        action: (Int, Int) -> Unit
-    ) {
-
-        for ((dx, dy) in directionsOfAdjacentCells) {
-
-            val adjX = x + dx
-            val adjY = y + dy
-
-            if (isCellWithinBounds(adjX, adjY))
-                action(adjX, adjY)
-        }
-    }
-
     companion object {
+
+        fun create(
+            config: GameConfig,
+            seed: Int
+        ): Minefield =
+            Minefield(
+                config = config,
+                seed = seed,
+                matrix = createMatrix(
+                    width = config.mapWidth,
+                    height = config.mapHeight,
+                    mineCount = config.mineCount,
+                    seed = seed
+                )
+            )
 
         private fun createMatrix(
             width: Int,
