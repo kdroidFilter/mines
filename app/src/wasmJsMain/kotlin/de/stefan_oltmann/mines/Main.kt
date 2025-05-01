@@ -22,13 +22,21 @@ package de.stefan_oltmann.mines
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
 import kotlinx.browser.document
+import org.w3c.dom.HTMLElement
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
     ComposeViewport(document.body!!) {
-        appLoaded()
+        hideLoader()
         App()
     }
 }
 
-external fun appLoaded()
+// Function to hide the loader and show the app
+fun hideLoader() {
+    val loader = document.getElementById("loader") as? HTMLElement
+    val app = document.getElementById("app") as? HTMLElement
+
+    loader?.style?.display = "none" // Hide the loader
+    app?.style?.display = "block"   // Show the app
+}
