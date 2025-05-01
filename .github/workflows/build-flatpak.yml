@@ -2,16 +2,14 @@ name: Build & Release Flatpak
 
 on:
   push:
-    tags:
-      - 'v*'          # builds only on version tags
+    branches: [main]
 
 jobs:
   build-flatpak:
     runs-on: ubuntu-latest
 
-    # ← correct image tag
     container:
-      image: ghcr.io/flathub-infra/flatpak-github-actions:freedesktop-23.08
+      image: ghcr.io/flathub-infra/flatpak-github-actions:gnome-48
       options: --privileged
 
     steps:
