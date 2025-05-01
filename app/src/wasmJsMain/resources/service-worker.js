@@ -93,8 +93,9 @@ self.addEventListener('fetch', (event) => {
                 /*
                  * Cache hit - return the response from the cached version
                  */
-                if (response)
+                if (response) {
                     return response;
+                }
 
                 /*
                  * Not in cache - fetch from network
