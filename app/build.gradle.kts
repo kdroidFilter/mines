@@ -2,6 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import org.gradle.api.tasks.bundling.Compression
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -187,6 +188,13 @@ compose.desktop {
             linux {
                 iconFile.set(project.file("../icon/icon.png"))
             }
+
+            buildTypes.release.proguard {
+                isEnabled = true
+                obfuscate.set(false)
+                optimize.set(true)
+                configurationFiles.from(project.file("proguard-rules.pro"))
+            }
         }
     }
 }
@@ -210,3 +218,4 @@ configurations.all {
     }
 }
 // endregion
+
