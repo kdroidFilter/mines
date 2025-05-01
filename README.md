@@ -20,6 +20,7 @@ A simple mine puzzle game inspired by classic minesweeper, built using Kotlin Mu
 
 * JetBrains for making [Kotlin](https://kotlinlang.org).
 * [Elie Gambache](https://github.com/kdroidfilter) for several contributions like PWA support.
+* Mike Hearn for making [Hydraulic Conveyor](https://conveyor.hydraulic.dev).
 * Yahor for making the [Valkyrie IDEA plugin](https://github.com/ComposeGears/Valkyrie).
 * Alexander Zhirkevich for making [compottie](https://github.com/alexzhirkevich/compottie).
 * Shubh Dubey for making the [confetti animation](https://lottiefiles.com/free-animation/confetti-3ofTs67sBx).
