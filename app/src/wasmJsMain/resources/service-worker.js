@@ -2,7 +2,7 @@
  * Service Worker for Mines app
  */
 
-const CACHE_NAME = 'mines-cache-v2';
+const CACHE_NAME = 'mines-cache-v1';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -11,8 +11,8 @@ const ASSETS_TO_CACHE = [
   './app.js',
   './manifest.json',
   './icon.ico',
-  './icon.png',
   './icon_114.png',
+  './icon_256.png',
   './icon_512.png'
 ];
 
@@ -36,31 +36,24 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   event.waitUntil(
       caches.keys().then((cacheNames) => {
-
-            return Promise.all(
-                cacheNames.map((cacheName) => {
-                  if (cacheName !== CACHE_NAME) {
-                    console.log('Deleting old cache:', cacheName);
-                    return caches.delete(cacheName);
-                  }
-                })
-            );
-          }
-      ).then(() => {
-
-        /*
-         * Optional: Take control of uncontrolled clients
-         * This is commented out to prevent potential refresh loops in production
-         */
-        // return self.clients.claim();
-
-        /*
-         * Instead, log that activation is complete
-         */
-        console.log('Service worker activated and ready');
-
-        return Promise.resolve();
+        return Promise.all(
+            cacheNames.map((cacheName) => {
+              if (cacheName !== CACHE_NAME) {
+                console.log('Deleting old cache:', cacheName);
+                return caches.delete(cacheName);
+              }
+            })
+        );
       })
+          .then(() => {
+            // Optional: Take control of uncontrolled clients
+            // This is commented out to prevent potential refresh loops in production
+            // return self.clients.claim();
+
+            // Instead, log that activation is complete
+            console.log('Service worker activated and ready');
+            return Promise.resolve();
+          })
   );
 });
 
@@ -73,13 +66,11 @@ self.addEventListener('fetch', (event) => {
    * Skip caching for navigation requests to prevent refresh loops
    */
   if (event.request.mode === 'navigate') {
-
     event.respondWith(
         fetch(event.request).catch(() => {
           return caches.match(event.request);
         })
     );
-
     return;
   }
 
@@ -132,7 +123,9 @@ self.addEventListener('fetch', (event) => {
          */
         console.log('Fetch failed, network and cache unavailable');
 
-        // TODO Add a custom offline page
+        /*
+         * Note: You could return a custom offline page here
+         */
       })
   );
 });
