@@ -6,75 +6,77 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.graphics.vector.path
 import androidx.compose.ui.unit.dp
 
-val AppIconWhite: ImageVector
+private val fillColor = SolidColor(Color(0xFF777777))
+
+val AppIcon: ImageVector
     get() {
-        if (_AppIconWhite != null) {
-            return _AppIconWhite!!
+        if (_AppIcon != null) {
+            return _AppIcon!!
         }
-        _AppIconWhite = ImageVector.Builder(
-            name = "AppIconWhite",
+        _AppIcon = ImageVector.Builder(
+            name = "AppIcon",
             defaultWidth = 512.dp,
             defaultHeight = 512.dp,
             viewportWidth = 512f,
             viewportHeight = 512f
         ).apply {
-            path(fill = SolidColor(Color.White)) {
+            path(fill = fillColor) {
                 moveTo(256f, 256f)
                 moveToRelative(-120f, 0f)
                 arcToRelative(120f, 120f, 0f, isMoreThanHalf = true, isPositiveArc = true, 240f, 0f)
                 arcToRelative(120f, 120f, 0f, isMoreThanHalf = true, isPositiveArc = true, -240f, 0f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(256f, 227f)
                 lineTo(256f, 51f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(256f, 256f)
                 lineTo(400f, 112f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(253f, 256f)
                 lineTo(461f, 256f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(256f, 256f)
                 lineTo(400f, 400f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(256f, 253f)
                 lineTo(256f, 461f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(256f, 256f)
                 lineTo(112f, 400f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(259f, 256f)
                 lineTo(51f, 256f)
             }
             path(
-                stroke = SolidColor(Color.White),
+                stroke = fillColor,
                 strokeLineWidth = 50f
             ) {
                 moveTo(256f, 256f)
@@ -82,8 +84,8 @@ val AppIconWhite: ImageVector
             }
         }.build()
 
-        return _AppIconWhite!!
+        return _AppIcon!!
     }
 
 @Suppress("ObjectPropertyName")
-private var _AppIconWhite: ImageVector? = null
+private var _AppIcon: ImageVector? = null

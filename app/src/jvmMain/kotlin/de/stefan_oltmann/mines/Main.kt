@@ -22,7 +22,7 @@ package de.stefan_oltmann.mines
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import de.stefan_oltmann.mines.ui.icons.AppIconWhite
+import de.stefan_oltmann.mines.ui.icons.AppIcon
 import io.github.kdroidfilter.platformtools.OperatingSystem
 import io.github.kdroidfilter.platformtools.darkmodedetector.windows.setWindowsAdaptiveTitleBar
 import io.github.kdroidfilter.platformtools.getOperatingSystem
@@ -42,7 +42,7 @@ fun main() {
         Window(
             onCloseRequest = ::exitApplication,
             title = APP_TITLE,
-            icon = rememberVectorPainter(AppIconWhite)
+            icon = rememberVectorPainter(AppIcon)
         ) {
 
             /*
