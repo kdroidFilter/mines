@@ -22,31 +22,40 @@ package de.stefan_oltmann.mines
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
-import de.stefan_oltmann.mines.ui.icons.AppIcon
+import de.stefan_oltmann.mines.ui.icons.AppIconWhite
 import io.github.kdroidfilter.platformtools.OperatingSystem
 import io.github.kdroidfilter.platformtools.darkmodedetector.windows.setWindowsAdaptiveTitleBar
 import io.github.kdroidfilter.platformtools.getOperatingSystem
 import java.awt.Dimension
 
 fun main() {
-    //Title bar in dark mode on macOS.
-    if (getOperatingSystem() == OperatingSystem.MACOS) System.setProperty("apple.awt.application.appearance", "NSAppearanceNameDarkAqua")
+
+    /*
+     * Title bar in dark mode on macOS.
+     */
+    if (getOperatingSystem() == OperatingSystem.MACOS) System.setProperty(
+        "apple.awt.application.appearance",
+        "NSAppearanceNameDarkAqua"
+    )
 
     application {
         Window(
             onCloseRequest = ::exitApplication,
             title = APP_TITLE,
-            icon = rememberVectorPainter(AppIcon)
+            icon = rememberVectorPainter(AppIconWhite)
         ) {
-            //Title bar in dark mode on Windows.
+
+            /*
+             * Title bar in dark mode on Windows.
+             */
             window.setWindowsAdaptiveTitleBar(dark = true)
+
             /*
              * The layout breaks if we allow too small sizes.
              */
             this.window.minimumSize = Dimension(600, 600)
 
             App()
-
         }
     }
 }
