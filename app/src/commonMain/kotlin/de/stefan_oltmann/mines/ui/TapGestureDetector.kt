@@ -104,7 +104,6 @@ internal suspend fun PointerInputScope.detectTapGesturesMod(
 
         if (upOrCancel != null) {
 
-            // tap was successful.
             if (onDoubleTap == null) {
 
                 onTap?.invoke(upOrCancel.position)
@@ -119,7 +118,6 @@ internal suspend fun PointerInputScope.detectTapGesturesMod(
 
                 } else {
 
-                    // Second tap down detected
                     launch {
                         pressScope.reset()
                     }
