@@ -9,7 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidGitVersion)
-    id("dev.hydraulic.conveyor") version "1.12"
+    alias(libs.plugins.hydraulicConveyor)
 }
 
 androidGitVersion {

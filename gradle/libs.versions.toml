@@ -15,6 +15,7 @@ runtimeAndroid = "1.8.0"
 androidGitVersion = "0.4.14"
 compottie = "2.0.0-rc04"
 compose-ui-test = "1.8.0"
+hydraulicConveyor = "1.12"
 
 [libraries]
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
@@ -41,3 +42,4 @@ composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "compose-mu
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidGitVersion = { id = "com.gladed.androidgitversion", version.ref = "androidGitVersion" }
+hydraulicConveyor = { id = "dev.hydraulic.conveyor", version.ref = "hydraulicConveyor" }
