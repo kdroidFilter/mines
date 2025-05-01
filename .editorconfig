@@ -17,7 +17,7 @@ ij_smart_tabs = false
 ij_wrap_on_typing = false
 ij_visual_guides = 100, 110, 120
 
-[{*.yml,*.json,gradlew}]
+[{*.js,*.yml,*.json,gradlew}]
 indent_size = 2
 
 [{*.yml,*.md,*.txt}]
