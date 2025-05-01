@@ -25,7 +25,7 @@ html, body {
     width: 60px;
     height: 60px;
     border: 8px solid #333; /* Dark gray ring */
-    border-top: 8px solid #bb86fc; /* Accent ring (purple) */
+    border-top: 8px solid #FFFFFF; /* Accent ring (white) */
     border-radius: 50%;
     animation: spin 1s linear infinite;
 }
