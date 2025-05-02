@@ -29,7 +29,7 @@ modules:
       - cp -ru lib/* /app/lib/
     sources:
       - type: archive
-        path: ../app/build/distributions/Mines-linux.tar.gz
+        path: ../app/build/distributions/app-linux.tar.gz
       - type: file
         path: ../icon/icon.png
       - type: file

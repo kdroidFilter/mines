@@ -45,6 +45,12 @@ jobs:
           name: flatpak-bundle
           path: app/build/flatpak/*.flatpak
 
+      - name: Upload tar.gz artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: tar-gz-bundle
+          path: app/build/distributions/de.stefan_oltmann.mines-*.tar.gz
+
   release:
     needs: build-flatpak
     runs-on: ubuntu-latest
@@ -59,9 +65,16 @@ jobs:
         with:
           name: flatpak-bundle
 
+      - name: Download tar.gz artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tar-gz-bundle
+
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
-          files: "*.flatpak"
+          files: |
+            *.flatpak
+            *.tar.gz
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

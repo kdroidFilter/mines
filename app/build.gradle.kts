@@ -310,11 +310,29 @@ tasks {
         group = "compose desktop"
         description = "Creates the tar.gz archive of the release binary"
         from(named("createReleaseDistributable"))
-        archiveBaseName = "Mines"
-        archiveClassifier = "linux"
+        archiveBaseName = "de.stefan_oltmann.mines"
+        archiveVersion = appVersion
         compression = Compression.GZIP
         archiveExtension = "tar.gz"
-        archiveFileName = "Mines-linux.tar.gz"
+        // The resulting filename will be de.stefan_oltmann.mines-{version}.tar.gz
+    }
+
+    val createFlatpakTarLink by registering {
+        group = "compose desktop"
+        description = "Creates a copy of the tar.gz file with the name app-linux.tar.gz for Flatpak builds"
+        dependsOn(packageTarReleaseDistributable)
+
+        doLast {
+            val sourceFile = packageTarReleaseDistributable.get().archiveFile.get().asFile
+            val targetFile = File(sourceFile.parentFile, "app-linux.tar.gz")
+
+            if (targetFile.exists()) {
+                targetFile.delete()
+            }
+
+            sourceFile.copyTo(targetFile, overwrite = true)
+            logger.lifecycle("Created Flatpak-compatible tar.gz file: ${targetFile.absolutePath}")
+        }
     }
 
     /**
@@ -363,7 +381,7 @@ tasks {
     val buildFlatpak by registering {
         group = "compose desktop"
         description = "Builds and exports the Flatpak into the local repo"
-        dependsOn(packageTarReleaseDistributable, updateMetainfo)
+        dependsOn(createFlatpakTarLink, updateMetainfo)
 
         doLast {
             if (!isLinux()) {
