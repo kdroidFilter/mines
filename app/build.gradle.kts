@@ -2,7 +2,6 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
-import org.gradle.api.tasks.bundling.Compression
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -220,8 +219,9 @@ configurations.all {
 // endregion
 
 tasks {
+
     val appId = "de.stefan_oltmann.mines"
-    val appVersion = androidGitVersion.name()
+    val appVersion = version.toString()
 
     val packageTarReleaseDistributable by registering(Tar::class) {
         group = "compose desktop"

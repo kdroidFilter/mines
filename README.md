@@ -2,7 +2,7 @@
 
 [![Kotlin](https://img.shields.io/badge/kotlin-2.1.20-blue.svg?logo=kotlin)](httpw://kotlinlang.org)
 
-<a href="https://apps.microsoft.com/detail/9nw19gl6br5k?mode=popup">
+<a href="https://apps.microsoft.com/detail/9NW19GL6BR5K?mode=popup">
     <img src="https://get.microsoft.com/images/en-us%20dark.svg" alt="Download from Microsoft Store" width="200">
 </a>
 <br>
