@@ -2,6 +2,7 @@ import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
+import org.gradle.api.tasks.bundling.Compression
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -187,6 +188,13 @@ compose.desktop {
             linux {
                 iconFile.set(project.file("../icon/icon.png"))
             }
+
+            buildTypes.release.proguard {
+                isEnabled = true
+                obfuscate.set(false)
+                optimize.set(true)
+                configurationFiles.from(project.file("proguard-rules.pro"))
+            }
         }
     }
 }
@@ -210,3 +218,68 @@ configurations.all {
     }
 }
 // endregion
+
+tasks {
+    val appId = "de.stefan_oltmann.mines"
+    val appVersion = androidGitVersion.name()
+
+    val packageTarReleaseDistributable by registering(Tar::class) {
+        group = "compose desktop"
+        description = "Creates the tar.gz archive of the release binary"
+        from(named("createReleaseDistributable"))
+        archiveBaseName = "Mines"
+        archiveClassifier = "linux"
+        compression = Compression.GZIP
+        archiveExtension = "tar.gz"
+        archiveFileName = "Mines-linux.tar.gz"
+    }
+
+    /**
+     * Single-step task: build + finish + export to repo
+     */
+    val buildFlatpak by registering(Exec::class) {
+        group = "compose desktop"
+        description = "Builds and exports the Flatpak into the local repo"
+        dependsOn(packageTarReleaseDistributable)
+        commandLine(
+            "flatpak-builder",
+            "--user",
+            "--force-clean",
+            "--install-deps-from=flathub",
+            "--disable-rofiles-fuse",
+            "--repo=${rootDir}/repo", // absolute path recommended
+            "build-dir",
+            "${project.projectDir}/src/jvmMain/$appId.yml"
+        )
+        doFirst { println("buildFlatpak -- INFO -- Building + exporting") }
+    }
+
+    /**
+     * Creates the .flatpak file from the repo
+     */
+    val bundleFlatpak by registering(Exec::class) {
+        group = "compose desktop"
+        description = "Generates the final .flatpak file"
+        dependsOn(buildFlatpak)
+        workingDir(rootDir)
+        doFirst {
+            val outputDir = file("${layout.buildDirectory.get()}/flatpak").apply { mkdirs() }
+            println("bundleFlatpak -- INFO -- Output: $outputDir")
+            commandLine(
+                "flatpak", "build-bundle",
+                "repo",
+                "$outputDir/$appId-$appVersion.flatpak",
+                appId
+            )
+        }
+    }
+
+    /**
+     * Public entry task
+     */
+    register("packageFlatpakReleaseDistributable") {
+        group = "compose desktop"
+        description = "Full chain: tar.gz + flatpak"
+        dependsOn(bundleFlatpak)
+    }
+}
