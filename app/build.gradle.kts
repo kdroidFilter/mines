@@ -219,10 +219,16 @@ configurations.all {
 }
 // endregion
 
+/*
+ * Tasks for flatpak release
+ */
 tasks {
 
     val appId = "de.stefan_oltmann.mines"
-    // Get the tag from GitHub Actions environment variable if available, otherwise use version.toString()
+
+    /*
+     * Get the tag from GitHub Actions environment variable if available, otherwise use version.toString()
+     */
     val appVersion = System.getenv("GITHUB_REF")?.let { ref ->
         if (ref.startsWith("refs/tags/")) {
             val tag = ref.removePrefix("refs/tags/")
@@ -237,16 +243,22 @@ tasks {
         version.toString()
     }
 
-    // Common constants for flatpak tasks
+    /*
+     * Common constants for flatpak tasks
+     */
     val metainfoPath = "${rootDir}/flatpak/$appId.metainfo.xml"
 
-    // Helper function to check if running on Linux
+    /*
+     * Helper function to check if running on Linux
+     */
     fun isLinux(): Boolean {
         val osName = System.getProperty("os.name").lowercase()
         return osName.contains("linux")
     }
 
-    // Helper function to check if flatpak-builder is installed
+    /*
+     * Helper function to check if flatpak-builder is installed
+     */
     fun isFlatpakBuilderInstalled(): Boolean {
         return try {
             val process = ProcessBuilder("which", "flatpak-builder")
@@ -260,8 +272,9 @@ tasks {
         }
     }
 
-
-    // Helper functions for XML operations
+    /*
+     * Helper functions for XML operations
+     */
     fun parseXmlFile(xmlFilePath: String): Pair<javax.xml.parsers.DocumentBuilder, org.w3c.dom.Document> {
         val xmlFile = file(xmlFilePath)
         require(xmlFile.exists()) { "XML file not found: $xmlFilePath" }
@@ -539,5 +552,4 @@ tasks {
         description = "Full chain: tar.gz + flatpak + cleanup"
         dependsOn(cleanupFlatpakBuild)
     }
-
 }
