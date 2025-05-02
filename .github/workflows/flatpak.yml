@@ -73,6 +73,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: flatpak-${{ github.ref_name }}
           files: |
             *.flatpak
             *.tar.gz
