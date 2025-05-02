@@ -3,7 +3,7 @@ name: Build & Release Flatpak
 on:
   push:
     tags:
-      - 'v*'
+      - '*'
 
 jobs:
   build-flatpak:
@@ -16,6 +16,8 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history and tags
 
       - name: Flatpak info
         run: flatpak --version
@@ -36,7 +38,7 @@ jobs:
       - name: Build Flatpak bundle
         run: ./gradlew packageFlatpakReleaseDistributable
 
-          
+
       - name: Upload Flatpak artifact
         uses: actions/upload-artifact@v4
         with:
