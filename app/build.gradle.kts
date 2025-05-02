@@ -221,7 +221,20 @@ configurations.all {
 tasks {
 
     val appId = "de.stefan_oltmann.mines"
-    val appVersion = version.toString()
+    // Get the tag from GitHub Actions environment variable if available, otherwise use version.toString()
+    val appVersion = System.getenv("GITHUB_REF")?.let { ref ->
+        if (ref.startsWith("refs/tags/")) {
+            val tag = ref.removePrefix("refs/tags/")
+            logger.lifecycle("Using tag from GitHub Actions: $tag")
+            tag
+        } else {
+            logger.lifecycle("GITHUB_REF doesn't start with 'refs/tags/': $ref, falling back to version.toString()")
+            version.toString()
+        }
+    } ?: run {
+        logger.lifecycle("GITHUB_REF not found, falling back to version.toString()")
+        version.toString()
+    }
 
     val packageTarReleaseDistributable by registering(Tar::class) {
         group = "compose desktop"
@@ -282,4 +295,5 @@ tasks {
         description = "Full chain: tar.gz + flatpak"
         dependsOn(bundleFlatpak)
     }
+
 }
