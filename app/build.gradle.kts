@@ -221,7 +221,7 @@ configurations.all {
 
 tasks {
     val appId = "de.stefan_oltmann.mines"
-    val appVersion = "1.3.4"
+    val appVersion = androidGitVersion.name()
 
     val packageTarReleaseDistributable by registering(Tar::class) {
         group = "compose desktop"
