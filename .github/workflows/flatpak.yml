@@ -24,9 +24,9 @@ jobs:
 
       - name: Add Flathub remote
         run: |
-            flatpak remote-add --user --if-not-exists \
-            flathub https://dl.flathub.org/repo/flathub.flatpakrepo
-            flatpak update -y --appstream flathub        
+          flatpak remote-add --user --if-not-exists \
+          flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          flatpak update -y --appstream flathub        
 
       - name: Set up Temurin JDK 17
         uses: actions/setup-java@v4
@@ -73,6 +73,7 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: flatpak-${{ github.ref_name }}
           files: |
             *.flatpak
             *.tar.gz
