@@ -38,6 +38,10 @@
     <url type="bugtracker">https://github.com/StefanOltmann/mines/issues</url>
     <url type="donation">https://github.com/sponsors/StefanOltmann</url>
     <developer_name>Stefan Oltmann</developer_name>
-    <releases/>
+    <releases>
+        <release>
+
+        </release>
+    </releases>
     <content_rating type="oars-1.1"/>
 </component>
