@@ -4,7 +4,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
-//        maven { url = uri("/app/offline-repository") }
+        maven { url = uri("/app/offline-repository") }
         maven { url = uri("file:offline-repository") }
         google {
             mavenContent {
@@ -20,7 +20,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-//        maven { url = uri("/app/offline-repository") }
+        maven { url = uri("/app/offline-repository") }
         maven { url = uri("file:offline-repository") }
         google {
             mavenContent {
