@@ -5,12 +5,12 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication) apply false
+//    alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidGitVersion)
     alias(libs.plugins.hydraulicConveyor)
-    alias(libs.plugins.flatpakGenerator)
+//    alias(libs.plugins.flatpakGenerator)
 }
 
 androidGitVersion {
@@ -218,7 +218,3 @@ configurations.all {
     }
 }
 // endregion
-tasks.flatpakGradleGenerator {
-    outputFile        = file("flatpak-sources.json")
-    downloadDirectory = "offline-repository"    // ← sans « ./ »
-}
