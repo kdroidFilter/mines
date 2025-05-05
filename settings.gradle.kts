@@ -4,7 +4,7 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
-        maven("./offline-repository")
+        maven("/offline-repository")
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
@@ -19,7 +19,7 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
-        maven("./offline-repository")
+        maven("/offline-repository")
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
