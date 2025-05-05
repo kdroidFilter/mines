@@ -1,5 +1,5 @@
 [versions]
-agp = "8.5.2"
+agp = "8.9.2"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -43,3 +43,4 @@ composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "k
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidGitVersion = { id = "com.gladed.androidgitversion", version.ref = "androidGitVersion" }
 hydraulicConveyor = { id = "dev.hydraulic.conveyor", version.ref = "hydraulicConveyor" }
+flatpakGenerator = { id = "io.github.jwharm.flatpak-gradle-generator", version = "1.5.0"}
