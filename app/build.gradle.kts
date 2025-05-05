@@ -5,11 +5,12 @@ import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.androidGitVersion)
     alias(libs.plugins.hydraulicConveyor)
+    alias(libs.plugins.flatpakGenerator)
 }
 
 androidGitVersion {
@@ -22,11 +23,11 @@ logger.lifecycle("App version $version (Code: ${androidGitVersion.code()})")
 
 kotlin {
 
-    androidTarget {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-        }
-    }
+//    androidTarget {
+//        compilerOptions {
+//            jvmTarget.set(JvmTarget.JVM_11)
+//        }
+//    }
 
     jvm()
 
@@ -108,51 +109,51 @@ kotlin {
     }
 }
 
-android {
-
-    namespace = "de.stefan_oltmann.mines"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-
-    defaultConfig {
-
-        applicationId = "de.stefan_oltmann.mines"
-
-        minSdk = libs.versions.android.minSdk.get().toInt()
-        targetSdk = libs.versions.android.targetSdk.get().toInt()
-
-        if (androidGitVersion.code() == 0) {
-
-            /* Values for the dev version. */
-            versionName = "1.0.0"
-            versionCode = 1
-
-        } else {
-
-            versionName = androidGitVersion.name()
-            versionCode = androidGitVersion.code()
-        }
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-
-    buildTypes {
-        getByName("release") {
-            /*
-             * As an open source project we don't need ProGuard.
-             */
-            isMinifyEnabled = false
-        }
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
-    }
-}
+//android {
+//
+//    namespace = "de.stefan_oltmann.mines"
+//    compileSdk = libs.versions.android.compileSdk.get().toInt()
+//
+//    defaultConfig {
+//
+//        applicationId = "de.stefan_oltmann.mines"
+//
+//        minSdk = libs.versions.android.minSdk.get().toInt()
+//        targetSdk = libs.versions.android.targetSdk.get().toInt()
+//
+//        if (androidGitVersion.code() == 0) {
+//
+//            /* Values for the dev version. */
+//            versionName = "1.0.0"
+//            versionCode = 1
+//
+//        } else {
+//
+//            versionName = androidGitVersion.name()
+//            versionCode = androidGitVersion.code()
+//        }
+//    }
+//
+//    packaging {
+//        resources {
+//            excludes += "/META-INF/{AL2.0,LGPL2.1}"
+//        }
+//    }
+//
+//    buildTypes {
+//        getByName("release") {
+//            /*
+//             * As an open source project we don't need ProGuard.
+//             */
+//            isMinifyEnabled = false
+//        }
+//    }
+//
+//    compileOptions {
+//        sourceCompatibility = JavaVersion.VERSION_11
+//        targetCompatibility = JavaVersion.VERSION_11
+//    }
+//}
 
 compose.desktop {
 
@@ -199,14 +200,14 @@ compose.desktop {
 }
 
 dependencies {
+//
+//    implementation(libs.androidx.runtime.android)
+//    debugImplementation(compose.uiTooling)
 
-    implementation(libs.androidx.runtime.android)
-    debugImplementation(compose.uiTooling)
-
-    linuxAmd64(compose.desktop.linux_x64)
-    macAmd64(compose.desktop.macos_x64)
-    macAarch64(compose.desktop.macos_arm64)
-    windowsAmd64(compose.desktop.windows_x64)
+//    linuxAmd64(compose.desktop.linux_x64)
+//    macAmd64(compose.desktop.macos_x64)
+//    macAarch64(compose.desktop.macos_arm64)
+//    windowsAmd64(compose.desktop.windows_x64)
 }
 
 // region Work around temporary Compose bugs.
@@ -217,3 +218,7 @@ configurations.all {
     }
 }
 // endregion
+tasks.flatpakGradleGenerator {
+    outputFile        = file("flatpak-sources.json")
+    downloadDirectory = "offline-repository"    // ← sans « ./ »
+}
